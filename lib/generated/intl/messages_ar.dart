@@ -22,7 +22,17 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "DontHaveAcc": MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟"),
+    "createOne": MessageLookupByLibrary.simpleMessage("انشئ حساب!"),
     "description": MessageLookupByLibrary.simpleMessage("موضوع"),
+    "email": MessageLookupByLibrary.simpleMessage("البريد الالكتروني"),
+    "forgetPassword": MessageLookupByLibrary.simpleMessage("نسيت كلمة المرور؟"),
+    "login": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
+    "loginWithGoogle": MessageLookupByLibrary.simpleMessage(
+      "تسجيل الدخول بأستخدام جوجل",
+    ),
+    "or": MessageLookupByLibrary.simpleMessage("أو"),
+    "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
     "title": MessageLookupByLibrary.simpleMessage("عنوان"),
   };
 }
