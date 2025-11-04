@@ -3,7 +3,7 @@ import 'package:movies_app/onBorading/onBoradingScrean.dart';
 import 'package:movies_app/utils/app_route.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MoviesApp());
 }
 
 class MoviesApp extends StatelessWidget {
