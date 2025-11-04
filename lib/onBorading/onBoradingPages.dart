@@ -12,7 +12,7 @@ class OnboradingPages extends StatelessWidget {
     required this.buttonText,
     required this.isLast,
     required this.isFirst,
-    this.buttonText2 = 'Back',
+    required this.buttonText2 ,
     required this.onNext,
     required this.onBack,
   });
@@ -64,16 +64,12 @@ class OnboradingPages extends StatelessWidget {
                     ? SizedBox.shrink()
                     : Text(
                         desc,
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.6),
-                          fontSize: 19,
-                          fontWeight: FontWeight.w200,
-                        ),
+                        style: AppStyle.reglur20white,
                         textAlign: TextAlign.center,
                       ),
-                SizedBox(height: height * 0.04),
+                SizedBox(height: height * 0.02),
                 CustomElevatedButton(
-                  padding: EdgeInsets.symmetric(vertical: height * 0.027),
+                  padding: EdgeInsets.symmetric(vertical: height * 0.015),
                   text: buttonText,
                   onPressed: onNext,
                   textStyle: AppStyle.semibold20black,
@@ -81,7 +77,7 @@ class OnboradingPages extends StatelessWidget {
                 SizedBox(height: height * 0.02),
                 if (!isFirst)
                   CustomElevatedButton(
-                    padding: EdgeInsets.symmetric(vertical: height * 0.027),
+                    padding: EdgeInsets.symmetric(vertical: height * 0.015),
                     text: buttonText2,
                     backgroundColor: Colors.transparent,
                     borderColor: AppColor.yellow,

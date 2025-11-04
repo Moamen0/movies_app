@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movies_app/generated/l10n.dart';
 import 'package:movies_app/onBorading/onBoradingPages.dart';
 import 'package:movies_app/utils/app_assets.dart';
+import 'package:movies_app/utils/app_route.dart';
 
 class OnBoradingItem extends StatefulWidget {
   const OnBoradingItem({super.key});
@@ -19,73 +20,70 @@ class _OnBoradingScreenState extends State<OnBoradingItem> {
     List<Map<String, String>> onboardingData = [
       {
         "image": AppAssets.onborading2,
-        "title": 'Welcome to MovieApp',
-        "desc":
-            "Explore a vast collection of movies in all qualities and genres. Find your next favorite film with ease.",
-        "button": "Next"
+        "title": S.of(context).Discover_Movies,
+        "desc": S.of(context).Explore_avast_collection,
+        "button": S.of(context).next
       },
       {
         "image": AppAssets.onborading3,
-        "title": "Explore All Genres",
-        "desc":
-            "Discover movies from every genre, in all available qualities. Find something new and exciting to watch every day.",
-        "button": "Next"
+        "title": S.of(context).Explore_All_Genres,
+        "desc": S.of(context).Discover_movies_from_every_genre,
+        "button": S.of(context).next
       },
       {
         "image": AppAssets.onborading4,
-        "title": "Rate, Review, and Learn",
-        "desc":
-            "Share your thoughts on the movies you’ve watched. Deep dive into their details and discover movies with reviews.",
-        "button": "Next"
+        "title": S.of(context).Create_Watchlists,
+        "desc": S.of(context).Save_movies_to_your_watchlist,
+        "button": S.of(context).next
       },
       {
         "image": AppAssets.onborading5,
-        "title": "Rate, Review, and Learn",
-        "desc":
-            "Share your thoughts on the movies you’ve watched. Deep dive into their details and discover movies with reviews.",
-        "button": "Next"
+        "title": S.of(context).RateReviewandLearn,
+        "desc": S.of(context).Shareyourthoughts,
+        "button": S.of(context).next
       },
       {
         "image": AppAssets.onborading6,
-        "title": "Start Watching Now",
+        "title": S.of(context).StartWatchingNow,
         "desc": "",
-        "button": "Finish"
+        "button": S.of(context).finish
       },
     ];
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: SafeArea(
-        child: PageView.builder(
-          controller: _controller,
-          itemCount: onboardingData.length,
-          onPageChanged: (index) {
-            setState(() => currentPage = index);
+      body: PageView.builder(
+        controller: _controller,
+        itemCount: onboardingData.length,
+        onPageChanged: (index) {
+          setState(() => currentPage = index);
+        },
+        itemBuilder: (context, index) => OnboradingPages(
+          buttonText2: S.of(context).back,
+          image: onboardingData[index]["image"]!,
+          title: onboardingData[index]["title"]!,
+          desc: onboardingData[index]["desc"]!,
+          buttonText: onboardingData[index]["button"]!,
+          isLast: index == onboardingData.length - 1,
+          isFirst: index == 0,
+          onNext: () {
+            if (index < onboardingData.length - 1) {
+              _controller.nextPage(
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeInOut,
+              );
+            } else {
+              Navigator.of(context).pushReplacementNamed(AppRoute.loginScreen);
+            }
           },
-          itemBuilder: (context, index) => OnboradingPages(
-            image: onboardingData[index]["image"]!,
-            title: onboardingData[index]["title"]!,
-            desc: onboardingData[index]["desc"]!,
-            buttonText: onboardingData[index]["button"]!,
-            isLast: index == onboardingData.length - 1,
-            isFirst: index == 0,
-            onNext: () {
-              if (index < onboardingData.length - 1) {
-                _controller.nextPage(
-                  duration: const Duration(milliseconds: 400),
-                  curve: Curves.easeInOut,
-                );
-              } else {}
-            },
-            onBack: () {
-              if (index > 0) {
-                _controller.previousPage(
-                  duration: const Duration(milliseconds: 400),
-                  curve: Curves.easeInOut,
-                );
-              }
-            },
-          ),
+          onBack: () {
+            if (index > 0) {
+              _controller.previousPage(
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeInOut,
+              );
+            }
+          },
         ),
       ),
     );

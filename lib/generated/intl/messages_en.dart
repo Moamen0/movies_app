@@ -37,7 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Explore a vast collection of movies in all qualities and genres. Find your next favorite film with ease.",
     ),
     "Get_access_to_ahuge": MessageLookupByLibrary.simpleMessage(
-      "Get access to a huge library of  movies \n to suit all tastes. You will surely like it.",
+      "Get access to a huge library of  movies to suit all tastes. You will surely like it.",
     ),
     "RateReviewandLearn": MessageLookupByLibrary.simpleMessage(
       "Rate, Review, and Learn",
@@ -48,14 +48,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "Shareyourthoughts": MessageLookupByLibrary.simpleMessage(
       "Share your thoughts on the movies you\'ve watched. Dive deep into film details and help others discover great movies with your reviews.",
     ),
+    "StartWatchingNow": MessageLookupByLibrary.simpleMessage(
+      "Start Watching Now",
+    ),
     "back": MessageLookupByLibrary.simpleMessage("Back"),
     "createOne": MessageLookupByLibrary.simpleMessage("Create one!"),
     "description": MessageLookupByLibrary.simpleMessage("Description"),
     "email": MessageLookupByLibrary.simpleMessage("Email"),
     "explorenow": MessageLookupByLibrary.simpleMessage("Explore Now"),
     "find_your_next_favorite_movie_Here": MessageLookupByLibrary.simpleMessage(
-      "Find Your Next \n Favorite Movie Here",
+      "Find Your Next  Favorite Movie Here",
     ),
+    "finish": MessageLookupByLibrary.simpleMessage("Finish"),
     "forgetPassword": MessageLookupByLibrary.simpleMessage("Forget Password?"),
     "login": MessageLookupByLibrary.simpleMessage("Login"),
     "loginWithGoogle": MessageLookupByLibrary.simpleMessage(

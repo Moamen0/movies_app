@@ -28,9 +28,10 @@ class S {
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false)
-        ? locale.languageCode
-        : locale.toString();
+    final name =
+        (locale.countryCode?.isEmpty ?? false)
+            ? locale.languageCode
+            : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -109,6 +110,21 @@ class S {
     return Intl.message('OR', name: 'or', desc: '', args: []);
   }
 
+  /// `Start Watching Now`
+  String get StartWatchingNow {
+    return Intl.message(
+      'Start Watching Now',
+      name: 'StartWatchingNow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Finish`
+  String get finish {
+    return Intl.message('Finish', name: 'finish', desc: '', args: []);
+  }
+
   /// `Login with Google`
   String get loginWithGoogle {
     return Intl.message(
@@ -134,20 +150,20 @@ class S {
     return Intl.message('Back', name: 'back', desc: '', args: []);
   }
 
-  /// `Find Your Next \n Favorite Movie Here`
+  /// `Find Your Next  Favorite Movie Here`
   String get find_your_next_favorite_movie_Here {
     return Intl.message(
-      'Find Your Next \n Favorite Movie Here',
+      'Find Your Next  Favorite Movie Here',
       name: 'find_your_next_favorite_movie_Here',
       desc: '',
       args: [],
     );
   }
 
-  /// `Get access to a huge library of  movies \n to suit all tastes. You will surely like it.`
+  /// `Get access to a huge library of  movies to suit all tastes. You will surely like it.`
   String get Get_access_to_ahuge {
     return Intl.message(
-      'Get access to a huge library of  movies \n to suit all tastes. You will surely like it.',
+      'Get access to a huge library of  movies to suit all tastes. You will surely like it.',
       name: 'Get_access_to_ahuge',
       desc: '',
       args: [],
