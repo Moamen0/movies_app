@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-{}
-=======
+
 {
     "title" : "Title",
     "description": "Description",
@@ -11,6 +9,19 @@
     "DontHaveAcc": "Don't Have Account?",
     "createOne": "Create one!",
     "or": "OR",
-    "loginWithGoogle": "Login with Google"
+    "loginWithGoogle": "Login with Google",
+    "explorenow": "Explore Now",
+  "next": "Next",
+  "back": "Back",
+  "find_your_next_favorite_movie_Here": "Find Your Next \n Favorite Movie Here",
+  "Get_access_to_ahuge": "Get access to a huge library of  movies \n to suit all tastes. You will surely like it.",
+  "Discover_Movies": "Discover Movies",
+  "Explore_All_Genres": "Explore All Genres",
+  "Discover_movies_from_every_genre": "Discover movies from every genre, in all available qualities. Find something new and exciting to watch every day.",
+  "Explore_avast_collection": "Explore a vast collection of movies in all qualities and genres. Find your next favorite film with ease.",
+  "Create_Watchlists": "Create Watchlists",
+  "Save_movies_to_your_watchlist": "Save movies to your watchlist to keep track of what you want to watch next. Enjoy films in various qualities and genres.",
+  "RateReviewandLearn": "Rate, Review, and Learn",
+  "Shareyourthoughts": "Share your thoughts on the movies you've watched. Dive deep into film details and help others discover great movies with your reviews."
+
 }
->>>>>>> 511a8f232fc362f1951e3034e221c23c82d49459
