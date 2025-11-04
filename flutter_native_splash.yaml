@@ -80,8 +80,8 @@ flutter_native_splash:
 
   # The android, ios and web parameters can be used to disable generating a splash screen on a given
   # platform.
-  #android: false
-  #ios: false
+  android: true
+  ios: true
   #web: false
 
   # Platform specific images can be specified with the following parameters, which will override
@@ -128,7 +128,7 @@ flutter_native_splash:
   # https://developer.apple.com/documentation/uikit/uiview/contentmode): scaleToFill,
   # scaleAspectFit, scaleAspectFill, center, top, bottom, left, right, topLeft, topRight,
   # bottomLeft, or bottomRight.
-  #ios_content_mode: center
+  ios_content_mode: scaleAspectFill
   #
   # web_image_mode can be one of the following modes: center, contain, stretch, and cover.
   #web_image_mode: center
