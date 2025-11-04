@@ -8,6 +8,9 @@
   "DontHaveAcc": "ليس لديك حساب؟",
   "createOne": "أنشئ حسابًا!",
   "or": "أو",
+      "finish": "بدأ الاستخدام",
+    "StartWatchingNow": "ابدأ بالمشاهدة الان",
+
   "loginWithGoogle": "تسجيل الدخول باستخدام Google",
   "explorenow": "استكشف الآن",
   "next": "التالي",
