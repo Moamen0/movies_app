@@ -1,0 +1,12 @@
+{
+      "title" : "عنوان",
+  "description": "موضوع",
+  "email": "البريد الالكتروني",
+  "password": "كلمة المرور",
+  "forgetPassword": "نسيت كلمة المرور؟",
+  "login": "تسجيل الدخول",
+  "DontHaveAcc": "ليس لديك حساب؟",
+  "createOne": "انشئ حساب!",
+  "or": "أو",
+  "loginWithGoogle": "تسجيل الدخول بأستخدام جوجل"
+}

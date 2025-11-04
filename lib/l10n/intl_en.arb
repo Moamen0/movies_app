@@ -1,1 +1,16 @@
+<<<<<<< HEAD
 {}
+=======
+{
+    "title" : "Title",
+    "description": "Description",
+    "email": "Email",
+    "password": "Password",
+    "forgetPassword": "Forget Password?",
+    "login": "Login",
+    "DontHaveAcc": "Don't Have Account?",
+    "createOne": "Create one!",
+    "or": "OR",
+    "loginWithGoogle": "Login with Google"
+}
+>>>>>>> 511a8f232fc362f1951e3034e221c23c82d49459

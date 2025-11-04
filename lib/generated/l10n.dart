@@ -28,9 +28,16 @@ class S {
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
+<<<<<<< HEAD
     final name = (locale.countryCode?.isEmpty ?? false)
         ? locale.languageCode
         : locale.toString();
+=======
+    final name =
+        (locale.countryCode?.isEmpty ?? false)
+            ? locale.languageCode
+            : locale.toString();
+>>>>>>> 511a8f232fc362f1951e3034e221c23c82d49459
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -53,13 +60,88 @@ class S {
   static S? maybeOf(BuildContext context) {
     return Localizations.of<S>(context, S);
   }
+<<<<<<< HEAD
+=======
+
+  /// `Title`
+  String get title {
+    return Intl.message('Title', name: 'title', desc: '', args: []);
+  }
+
+  /// `Description`
+  String get description {
+    return Intl.message('Description', name: 'description', desc: '', args: []);
+  }
+
+  /// `Email`
+  String get email {
+    return Intl.message('Email', name: 'email', desc: '', args: []);
+  }
+
+  /// `Password`
+  String get password {
+    return Intl.message('Password', name: 'password', desc: '', args: []);
+  }
+
+  /// `Forget Password?`
+  String get forgetPassword {
+    return Intl.message(
+      'Forget Password?',
+      name: 'forgetPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login`
+  String get login {
+    return Intl.message('Login', name: 'login', desc: '', args: []);
+  }
+
+  /// `Don't Have Account?`
+  String get DontHaveAcc {
+    return Intl.message(
+      'Don\'t Have Account?',
+      name: 'DontHaveAcc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create one!`
+  String get createOne {
+    return Intl.message('Create one!', name: 'createOne', desc: '', args: []);
+  }
+
+  /// `OR`
+  String get or {
+    return Intl.message('OR', name: 'or', desc: '', args: []);
+  }
+
+  /// `Login with Google`
+  String get loginWithGoogle {
+    return Intl.message(
+      'Login with Google',
+      name: 'loginWithGoogle',
+      desc: '',
+      args: [],
+    );
+  }
+>>>>>>> 511a8f232fc362f1951e3034e221c23c82d49459
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
   const AppLocalizationDelegate();
 
   List<Locale> get supportedLocales {
+<<<<<<< HEAD
     return const <Locale>[Locale.fromSubtags(languageCode: 'en')];
+=======
+    return const <Locale>[
+      Locale.fromSubtags(languageCode: 'en'),
+      Locale.fromSubtags(languageCode: 'ar'),
+    ];
+>>>>>>> 511a8f232fc362f1951e3034e221c23c82d49459
   }
 
   @override
