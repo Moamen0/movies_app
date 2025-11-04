@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/onBorading/onBoradingScrean.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:movies_app/generated/l10n.dart';
+import 'package:movies_app/ui/home_tab/home_tab.dart';
 import 'package:movies_app/utils/app_route.dart';
 import 'package:movies_app/utils/app_theme.dart';
 
