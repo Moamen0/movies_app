@@ -48,6 +48,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "Shareyourthoughts": MessageLookupByLibrary.simpleMessage(
       "شارك أفكارك حول الأفلام التي شاهدتها. تعمّق في تفاصيل الأفلام وساعد الآخرين على اكتشاف أفلام رائعة من خلال مراجعاتك.",
     ),
+    "StartWatchingNow": MessageLookupByLibrary.simpleMessage(
+      "ابدأ بالمشاهدة الان",
+    ),
     "back": MessageLookupByLibrary.simpleMessage("السابق"),
     "createOne": MessageLookupByLibrary.simpleMessage("أنشئ حسابًا!"),
     "description": MessageLookupByLibrary.simpleMessage("الوصف"),
@@ -56,6 +59,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "find_your_next_favorite_movie_Here": MessageLookupByLibrary.simpleMessage(
       "اكتشف فيلمك المفضل التالي هنا",
     ),
+    "finish": MessageLookupByLibrary.simpleMessage("بدأ الاستخدام"),
     "forgetPassword": MessageLookupByLibrary.simpleMessage(
       "هل نسيت كلمة المرور؟",
     ),
