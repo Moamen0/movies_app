@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:movies_app/generated/l10n.dart';
+import 'package:movies_app/onBorading/onBoradingItem.dart';
 import 'package:movies_app/onBorading/onBoradingScrean.dart';
 import 'package:movies_app/utils/app_route.dart';
 import 'package:movies_app/utils/app_theme.dart';
@@ -15,7 +16,6 @@ void main() {
 class MoviesApp extends StatelessWidget {
   const MoviesApp({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,11 +28,12 @@ class MoviesApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
-      initialRoute: AppRoute.loginScreen,
+      initialRoute: AppRoute.onborading,
       routes: {
         AppRoute.home_tab: (context) => HomeTab(),
         AppRoute.loginScreen: (context) => LoginScreen(),
         AppRoute.onborading: (context) => OnBoradingScrean(),
+        AppRoute.OnBoradingItem: (context) => OnBoradingItem(),
       },
       theme: AppTheme.theme,
     );
