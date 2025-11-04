@@ -17,4 +17,6 @@ class AppAssets {
   static const String passwordIcon = 'assets/images/password.png';
   static const String phoneIcon = 'assets/images/phone.png';
   static const String eyeoff = 'assets/images/eyeoff.png';
+    static const String onborading1 = 'assets/images/1onborading.png';
+
 }
