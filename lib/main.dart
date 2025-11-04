@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:movies_app/onBorading/onBoradingScrean.dart';
+import 'package:movies_app/utils/app_route.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -10,6 +12,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(   );
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialRoute: AppRoute.onborading,
+      routes: {AppRoute.onborading: (context) => OnBoradingScrean()},
+      themeMode: ThemeMode.dark,
+    );
   }
 }
