@@ -31,7 +31,8 @@ class MoviesApp extends StatelessWidget {
       initialRoute: AppRoute.loginScreen,
       routes: {
         AppRoute.home_tab: (context) => HomeTab(),
-        AppRoute.loginScreen: (context) => LoginScreen()
+        AppRoute.loginScreen: (context) => LoginScreen(),
+        AppRoute.onborading: (context) => OnBoradingScrean(),
       },
       theme: AppTheme.theme,
     );
