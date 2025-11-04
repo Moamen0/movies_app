@@ -22,17 +22,50 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "Create_Watchlists": MessageLookupByLibrary.simpleMessage(
+      "أنشئ قوائم مشاهدة",
+    ),
+    "Discover_Movies": MessageLookupByLibrary.simpleMessage("اكتشف الأفلام"),
+    "Discover_movies_from_every_genre": MessageLookupByLibrary.simpleMessage(
+      "اكتشف أفلامًا من كل الأنواع وبجميع الجودات المتاحة. ابحث عن شيء جديد ومثير لمشاهدته كل يوم.",
+    ),
     "DontHaveAcc": MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟"),
-    "createOne": MessageLookupByLibrary.simpleMessage("انشئ حساب!"),
-    "description": MessageLookupByLibrary.simpleMessage("موضوع"),
-    "email": MessageLookupByLibrary.simpleMessage("البريد الالكتروني"),
-    "forgetPassword": MessageLookupByLibrary.simpleMessage("نسيت كلمة المرور؟"),
+    "Explore_All_Genres": MessageLookupByLibrary.simpleMessage(
+      "استكشف جميع الأنواع",
+    ),
+    "Explore_avast_collection": MessageLookupByLibrary.simpleMessage(
+      "استكشف مجموعة ضخمة من الأفلام بجميع الجودات والأنواع. اعثر بسهولة على فيلمك المفضل التالي.",
+    ),
+    "Get_access_to_ahuge": MessageLookupByLibrary.simpleMessage(
+      "احصل على وصول إلى مكتبة ضخمة من الأفلام تناسب جميع الأذواق، بالتأكيد ستعجبك.",
+    ),
+    "RateReviewandLearn": MessageLookupByLibrary.simpleMessage(
+      "قيّم، راجع، وتعلّم",
+    ),
+    "Save_movies_to_your_watchlist": MessageLookupByLibrary.simpleMessage(
+      "احفظ الأفلام في قائمة المشاهدة الخاصة بك لتتابع ما تريد مشاهدته لاحقًا. استمتع بأفلام متنوعة في مختلف الجودات والأنواع.",
+    ),
+    "Shareyourthoughts": MessageLookupByLibrary.simpleMessage(
+      "شارك أفكارك حول الأفلام التي شاهدتها. تعمّق في تفاصيل الأفلام وساعد الآخرين على اكتشاف أفلام رائعة من خلال مراجعاتك.",
+    ),
+    "back": MessageLookupByLibrary.simpleMessage("السابق"),
+    "createOne": MessageLookupByLibrary.simpleMessage("أنشئ حسابًا!"),
+    "description": MessageLookupByLibrary.simpleMessage("الوصف"),
+    "email": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
+    "explorenow": MessageLookupByLibrary.simpleMessage("استكشف الآن"),
+    "find_your_next_favorite_movie_Here": MessageLookupByLibrary.simpleMessage(
+      "اكتشف فيلمك المفضل التالي هنا",
+    ),
+    "forgetPassword": MessageLookupByLibrary.simpleMessage(
+      "هل نسيت كلمة المرور؟",
+    ),
     "login": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
     "loginWithGoogle": MessageLookupByLibrary.simpleMessage(
-      "تسجيل الدخول بأستخدام جوجل",
+      "تسجيل الدخول باستخدام Google",
     ),
+    "next": MessageLookupByLibrary.simpleMessage("التالي"),
     "or": MessageLookupByLibrary.simpleMessage("أو"),
     "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
-    "title": MessageLookupByLibrary.simpleMessage("عنوان"),
+    "title": MessageLookupByLibrary.simpleMessage("العنوان"),
   };
 }

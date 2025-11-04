@@ -28,10 +28,9 @@ class S {
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name =
-        (locale.countryCode?.isEmpty ?? false)
-            ? locale.languageCode
-            : locale.toString();
+    final name = (locale.countryCode?.isEmpty ?? false)
+        ? locale.languageCode
+        : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -119,13 +118,127 @@ class S {
       args: [],
     );
   }
+
+  /// `Explore Now`
+  String get explorenow {
+    return Intl.message('Explore Now', name: 'explorenow', desc: '', args: []);
+  }
+
+  /// `Next`
+  String get next {
+    return Intl.message('Next', name: 'next', desc: '', args: []);
+  }
+
+  /// `Back`
+  String get back {
+    return Intl.message('Back', name: 'back', desc: '', args: []);
+  }
+
+  /// `Find Your Next \n Favorite Movie Here`
+  String get find_your_next_favorite_movie_Here {
+    return Intl.message(
+      'Find Your Next \n Favorite Movie Here',
+      name: 'find_your_next_favorite_movie_Here',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Get access to a huge library of  movies \n to suit all tastes. You will surely like it.`
+  String get Get_access_to_ahuge {
+    return Intl.message(
+      'Get access to a huge library of  movies \n to suit all tastes. You will surely like it.',
+      name: 'Get_access_to_ahuge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discover Movies`
+  String get Discover_Movies {
+    return Intl.message(
+      'Discover Movies',
+      name: 'Discover_Movies',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Explore All Genres`
+  String get Explore_All_Genres {
+    return Intl.message(
+      'Explore All Genres',
+      name: 'Explore_All_Genres',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discover movies from every genre, in all available qualities. Find something new and exciting to watch every day.`
+  String get Discover_movies_from_every_genre {
+    return Intl.message(
+      'Discover movies from every genre, in all available qualities. Find something new and exciting to watch every day.',
+      name: 'Discover_movies_from_every_genre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Explore a vast collection of movies in all qualities and genres. Find your next favorite film with ease.`
+  String get Explore_avast_collection {
+    return Intl.message(
+      'Explore a vast collection of movies in all qualities and genres. Find your next favorite film with ease.',
+      name: 'Explore_avast_collection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create Watchlists`
+  String get Create_Watchlists {
+    return Intl.message(
+      'Create Watchlists',
+      name: 'Create_Watchlists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save movies to your watchlist to keep track of what you want to watch next. Enjoy films in various qualities and genres.`
+  String get Save_movies_to_your_watchlist {
+    return Intl.message(
+      'Save movies to your watchlist to keep track of what you want to watch next. Enjoy films in various qualities and genres.',
+      name: 'Save_movies_to_your_watchlist',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rate, Review, and Learn`
+  String get RateReviewandLearn {
+    return Intl.message(
+      'Rate, Review, and Learn',
+      name: 'RateReviewandLearn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Share your thoughts on the movies you've watched. Dive deep into film details and help others discover great movies with your reviews.`
+  String get Shareyourthoughts {
+    return Intl.message(
+      'Share your thoughts on the movies you\'ve watched. Dive deep into film details and help others discover great movies with your reviews.',
+      name: 'Shareyourthoughts',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
   const AppLocalizationDelegate();
 
   List<Locale> get supportedLocales {
-    return const <Locale>[Locale.fromSubtags(languageCode: 'en')];
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
       Locale.fromSubtags(languageCode: 'ar'),

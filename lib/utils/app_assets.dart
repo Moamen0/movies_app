@@ -17,6 +17,10 @@ class AppAssets {
   static const String passwordIcon = 'assets/images/password.png';
   static const String phoneIcon = 'assets/images/phone.png';
   static const String eyeoff = 'assets/images/eyeoff.png';
-    static const String onborading1 = 'assets/images/1onborading.png';
-
+  static const String onborading1 = 'assets/images/1onborading.png';
+  static const String onborading2 = 'assets/images/2onborading.png';
+  static const String onborading3 = 'assets/images/3onborading.png';
+  static const String onborading4 = 'assets/images/4onborading.png';
+  static const String onborading5 = 'assets/images/5onborading.png';
+  static const String onborading6 = 'assets/images/6onborading.png';
 }
