@@ -1,4 +1,12 @@
 {
     "title" : "Title",
-    "description" : "Description"
+    "description": "Description",
+    "email": "Email",
+    "password": "Password",
+    "forgetPassword": "Forget Password?",
+    "login": "Login",
+    "DontHaveAcc": "Don't Have Account?",
+    "createOne": "Create one!",
+    "or": "OR",
+    "loginWithGoogle": "Login with Google"
 }

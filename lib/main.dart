@@ -3,6 +3,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:movies_app/generated/l10n.dart';
 import 'package:movies_app/ui/home_tab/home_tab.dart';
 import 'package:movies_app/utils/app_route.dart';
+import 'package:movies_app/utils/app_theme.dart';
+
+import 'auth/login_screen/login_screen.dart';
 
 void main() {
   runApp(const MoviesApp());
@@ -25,9 +28,12 @@ class MoviesApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
-      initialRoute: AppRoute.home_tab,
-      routes: {AppRoute.home_tab: (context) => HomeTab()
+      initialRoute: AppRoute.loginScreen,
+      routes: {
+        AppRoute.home_tab: (context) => HomeTab(),
+        AppRoute.loginScreen: (context) => LoginScreen()
       },
+      theme: AppTheme.theme,
     );
   }
 }
