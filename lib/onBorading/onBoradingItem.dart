@@ -18,28 +18,35 @@ class _OnBoradingScreenState extends State<OnBoradingItem> {
   Widget build(BuildContext context) {
     List<Map<String, String>> onboardingData = [
       {
-        "image": AppAssets.onborading1,
+        "image": AppAssets.onborading2,
         "title": 'Welcome to MovieApp',
         "desc":
             "Explore a vast collection of movies in all qualities and genres. Find your next favorite film with ease.",
         "button": "Next"
       },
       {
-        "image": AppAssets.onborading1,
+        "image": AppAssets.onborading3,
         "title": "Explore All Genres",
         "desc":
             "Discover movies from every genre, in all available qualities. Find something new and exciting to watch every day.",
         "button": "Next"
       },
       {
-        "image": AppAssets.onborading1,
+        "image": AppAssets.onborading4,
         "title": "Rate, Review, and Learn",
         "desc":
             "Share your thoughts on the movies you’ve watched. Deep dive into their details and discover movies with reviews.",
         "button": "Next"
       },
       {
-        "image": AppAssets.onborading1,
+        "image": AppAssets.onborading5,
+        "title": "Rate, Review, and Learn",
+        "desc":
+            "Share your thoughts on the movies you’ve watched. Deep dive into their details and discover movies with reviews.",
+        "button": "Next"
+      },
+      {
+        "image": AppAssets.onborading6,
         "title": "Start Watching Now",
         "desc": "",
         "button": "Finish"

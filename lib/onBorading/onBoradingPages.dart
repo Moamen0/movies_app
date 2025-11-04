@@ -37,7 +37,7 @@ class OnboradingPages extends StatelessWidget {
       children: [
         Image.asset(
           image,
-          fit: BoxFit.cover,
+          fit: BoxFit.fill,
         ),
         Align(
           alignment: Alignment.bottomCenter,
@@ -64,7 +64,11 @@ class OnboradingPages extends StatelessWidget {
                     ? SizedBox.shrink()
                     : Text(
                         desc,
-                        style: AppStyle.reglur20white,
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.6),
+                          fontSize: 19,
+                          fontWeight: FontWeight.w200,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                 SizedBox(height: height * 0.04),

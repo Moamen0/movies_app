@@ -22,19 +22,48 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "DontHaveAcc":
-            MessageLookupByLibrary.simpleMessage("Don\'t Have Account?"),
-        "createOne": MessageLookupByLibrary.simpleMessage("Create one!"),
-        "description": MessageLookupByLibrary.simpleMessage("Description"),
-        "email": MessageLookupByLibrary.simpleMessage("Email"),
-        "forgetPassword":
-            MessageLookupByLibrary.simpleMessage("Forget Password?"),
-        "login": MessageLookupByLibrary.simpleMessage("Login"),
-        "loginWithGoogle": MessageLookupByLibrary.simpleMessage(
-          "Login with Google",
-        ),
-        "or": MessageLookupByLibrary.simpleMessage("OR"),
-        "password": MessageLookupByLibrary.simpleMessage("Password"),
-        "title": MessageLookupByLibrary.simpleMessage("Title"),
-      };
+    "Create_Watchlists": MessageLookupByLibrary.simpleMessage(
+      "Create Watchlists",
+    ),
+    "Discover_Movies": MessageLookupByLibrary.simpleMessage("Discover Movies"),
+    "Discover_movies_from_every_genre": MessageLookupByLibrary.simpleMessage(
+      "Discover movies from every genre, in all available qualities. Find something new and exciting to watch every day.",
+    ),
+    "DontHaveAcc": MessageLookupByLibrary.simpleMessage("Don\'t Have Account?"),
+    "Explore_All_Genres": MessageLookupByLibrary.simpleMessage(
+      "Explore All Genres",
+    ),
+    "Explore_avast_collection": MessageLookupByLibrary.simpleMessage(
+      "Explore a vast collection of movies in all qualities and genres. Find your next favorite film with ease.",
+    ),
+    "Get_access_to_ahuge": MessageLookupByLibrary.simpleMessage(
+      "Get access to a huge library of  movies \n to suit all tastes. You will surely like it.",
+    ),
+    "RateReviewandLearn": MessageLookupByLibrary.simpleMessage(
+      "Rate, Review, and Learn",
+    ),
+    "Save_movies_to_your_watchlist": MessageLookupByLibrary.simpleMessage(
+      "Save movies to your watchlist to keep track of what you want to watch next. Enjoy films in various qualities and genres.",
+    ),
+    "Shareyourthoughts": MessageLookupByLibrary.simpleMessage(
+      "Share your thoughts on the movies you\'ve watched. Dive deep into film details and help others discover great movies with your reviews.",
+    ),
+    "back": MessageLookupByLibrary.simpleMessage("Back"),
+    "createOne": MessageLookupByLibrary.simpleMessage("Create one!"),
+    "description": MessageLookupByLibrary.simpleMessage("Description"),
+    "email": MessageLookupByLibrary.simpleMessage("Email"),
+    "explorenow": MessageLookupByLibrary.simpleMessage("Explore Now"),
+    "find_your_next_favorite_movie_Here": MessageLookupByLibrary.simpleMessage(
+      "Find Your Next \n Favorite Movie Here",
+    ),
+    "forgetPassword": MessageLookupByLibrary.simpleMessage("Forget Password?"),
+    "login": MessageLookupByLibrary.simpleMessage("Login"),
+    "loginWithGoogle": MessageLookupByLibrary.simpleMessage(
+      "Login with Google",
+    ),
+    "next": MessageLookupByLibrary.simpleMessage("Next"),
+    "or": MessageLookupByLibrary.simpleMessage("OR"),
+    "password": MessageLookupByLibrary.simpleMessage("Password"),
+    "title": MessageLookupByLibrary.simpleMessage("Title"),
+  };
 }
