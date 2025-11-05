@@ -21,6 +21,7 @@ class _LanguageToggleState extends State<LanguageToggle> {
       iconOpacity: 1.0,
       allowUnlistedValues: true,
       current: selectedValue,
+      spacing: 15,
       values: const [0, 1],
       onChanged: (value) {
         setState(() => selectedValue = value);
@@ -33,18 +34,18 @@ class _LanguageToggleState extends State<LanguageToggle> {
         borderRadius: BorderRadius.circular(25),
         indicatorColor: AppColor.yellow,
       ),
-      borderWidth: 3.0,
+      borderWidth: 1.5,
     );
   }
 
   Widget flagByValue(int? value) {
     switch (value) {
       case 0:
-        return Flag.fromCode(FlagsCode.US, height: 28, width: 40);
+        return Flag.fromCode(FlagsCode.US, height: 20, width: 30);
       case 1:
-        return Flag.fromCode(FlagsCode.EG, height: 28, width: 40);
+        return Flag.fromCode(FlagsCode.EG, height: 20, width: 30);
       default:
-        return const Icon(Icons.language, size: 28, color: Colors.white);
+        return const Icon(Icons.language, size: 20, color: Colors.white);
     }
   }
 }
