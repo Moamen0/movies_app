@@ -13,6 +13,9 @@
    "phoneNumber": "رقم الهاتف",
    "alreadyHaveAccount": "هل لديك حساب بالفعل؟",
   "or": "أو",
+    "Avatar": "الافاتار",
+  "Create_Account": "انشاء حساب",
+
       "Pick_Avatar": "اختر الافاتار",
           "Reset_Password": "اعاده تعيين كلمه المرور",
            "Current_Password": "كلمه المرور الحاليه",
