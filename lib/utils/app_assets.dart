@@ -23,4 +23,6 @@ class AppAssets {
   static const String onborading4 = 'assets/images/4onborading.png';
   static const String onborading5 = 'assets/images/5onborading.png';
   static const String onborading6 = 'assets/images/6onborading.png';
+  static const String forgetPasswordPhoto =
+      'assets/images/forgetPasswordPhoto.png';
 }

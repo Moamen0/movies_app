@@ -36,8 +36,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "Discover_movies_from_every_genre": MessageLookupByLibrary.simpleMessage(
       "اكتشف أفلامًا من كل الأنواع وبجميع الجودات المتاحة. ابحث عن شيء جديد ومثير لمشاهدته كل يوم.",
     ),
-    "DontHaveAcc": MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟"),
-    "Explore_All_Genres": MessageLookupByLibrary.simpleMessage(
+        "DontHaveAcc": MessageLookupByLibrary.simpleMessage("ليس لديك حساب"),
+        "Explore_All_Genres": MessageLookupByLibrary.simpleMessage(
       "استكشف جميع الأنواع",
     ),
     "Explore_avast_collection": MessageLookupByLibrary.simpleMessage(
@@ -64,7 +64,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "ابدأ بالمشاهدة الان",
     ),
     "Update_Data": MessageLookupByLibrary.simpleMessage("تحديث البيانات"),
-    "back": MessageLookupByLibrary.simpleMessage("السابق"),
+        "VerifyEmail": MessageLookupByLibrary.simpleMessage("تأكيد الحساب"),
+        "back": MessageLookupByLibrary.simpleMessage("السابق"),
     "createOne": MessageLookupByLibrary.simpleMessage("أنشئ حسابًا!"),
     "description": MessageLookupByLibrary.simpleMessage("الوصف"),
     "email": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),

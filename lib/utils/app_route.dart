@@ -5,4 +5,5 @@ class AppRoute {
   static const String OnBoradingItem = "OnBoradingItem";
   static const String updateProfile = "update_Profile";
   static const String resetPassword = "ResetPassword";
+  static const String forgetPassword = 'ForgetPassword';
 }

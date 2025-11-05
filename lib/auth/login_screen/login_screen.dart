@@ -67,9 +67,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, AppRoute.forgetPassword);
+                    },
                     child: Text(
-                      S.of(context).forgetPassword,
+                      '${S.of(context).forgetPassword}?',
                       style: AppStyle.reglur14yellow,
                     ),
                   ),
