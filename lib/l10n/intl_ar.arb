@@ -8,6 +8,15 @@
   "DontHaveAcc": "ليس لديك حساب؟",
   "createOne": "أنشئ حسابًا!",
   "or": "أو",
+      "Pick_Avatar": "اختر الافاتار",
+          "Reset_Password": "اعاده تعيين كلمه المرور",
+           "Current_Password": "كلمه المرور الحاليه",
+    "New_Password": "كلمه المرور الجديدة",
+    "Confirm_New_Password": "تأكيد كلمه المرور",
+ "Delete_Account": "حذف الايميل",
+  "Update_Data": "تحديث البيانات",
+  "reset_password": "اعاده تعيين كلمه المرور",
+
       "finish": "بدأ الاستخدام",
     "StartWatchingNow": "ابدأ بالمشاهدة الان",
 
