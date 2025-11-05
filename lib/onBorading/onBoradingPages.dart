@@ -12,7 +12,7 @@ class OnboradingPages extends StatelessWidget {
     required this.buttonText,
     required this.isLast,
     required this.isFirst,
-    required this.buttonText2 ,
+    required this.buttonText2,
     required this.onNext,
     required this.onBack,
   });

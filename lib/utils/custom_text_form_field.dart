@@ -11,7 +11,7 @@ import 'app_style.dart';
 
 class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({
-    Key? key,
+    super.key,
     this.controller,
     this.initialValue,
     this.label,
@@ -44,7 +44,7 @@ class CustomTextFormField extends StatelessWidget {
     this.iconColor = Colors.white70,
     this.cursorColor = AppColor.yellow,
     this.fillColor = AppColor.grayColor, // ✅ اللون الافتراضي للخلفية
-  }) : super(key: key);
+  });
 
   final TextEditingController? controller;
   final String? initialValue;

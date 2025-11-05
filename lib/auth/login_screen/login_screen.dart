@@ -6,10 +6,11 @@ import 'package:movies_app/utils/app_style.dart';
 import 'package:movies_app/utils/custom_elevated_button.dart';
 import 'package:movies_app/utils/custom_text_form_field.dart';
 
+import '../../animated_toggle_switch/animated_toggle_switch.dart';
 import '../../generated/l10n.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -67,9 +68,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, AppRoute.forgetPassword);
+                    },
                     child: Text(
-                      S.of(context).forgetPassword,
+                      '${S.of(context).forgetPassword}?',
                       style: AppStyle.reglur14yellow,
                     ),
                   ),
@@ -143,6 +146,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                 ),
               ),
+              SizedBox(
+                height: height * .03,
+              ),
+              const LanguageToggle()
             ],
           ),
         ),

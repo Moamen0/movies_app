@@ -34,12 +34,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
         title: Text(S.of(context).createOne,style: AppStyle.reglur16yellow,),
         centerTitle: true,
         iconTheme: IconThemeData(
-          color: AppColor.yellow
+            color: AppColor.yellow
         ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: width*0.04),
+          padding: EdgeInsets.symmetric(horizontal: width*0.04),
           child: Column(
             children: [
               SizedBox(height: height * 0.005),
@@ -155,7 +155,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       )),
                 ],
               ),
-
 
 
 
