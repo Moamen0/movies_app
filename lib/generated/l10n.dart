@@ -110,6 +110,51 @@ class S {
     return Intl.message('OR', name: 'or', desc: '', args: []);
   }
 
+  /// `Current Password`
+  String get Current_Password {
+    return Intl.message(
+      'Current Password',
+      name: 'Current_Password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Password`
+  String get New_Password {
+    return Intl.message(
+      'New Password',
+      name: 'New_Password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm New Password`
+  String get Confirm_New_Password {
+    return Intl.message(
+      'Confirm New Password',
+      name: 'Confirm_New_Password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pick Avatar`
+  String get Pick_Avatar {
+    return Intl.message('Pick Avatar', name: 'Pick_Avatar', desc: '', args: []);
+  }
+
+  /// `Reset Password`
+  String get Reset_Password {
+    return Intl.message(
+      'Reset Password',
+      name: 'Reset_Password',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Start Watching Now`
   String get StartWatchingNow {
     return Intl.message(
@@ -143,6 +188,31 @@ class S {
   /// `Next`
   String get next {
     return Intl.message('Next', name: 'next', desc: '', args: []);
+  }
+
+  /// `Reset Password`
+  String get reset_password {
+    return Intl.message(
+      'Reset Password',
+      name: 'reset_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete Account`
+  String get Delete_Account {
+    return Intl.message(
+      'Delete Account',
+      name: 'Delete_Account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update Data`
+  String get Update_Data {
+    return Intl.message('Update Data', name: 'Update_Data', desc: '', args: []);
   }
 
   /// `Back`
