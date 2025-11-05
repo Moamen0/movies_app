@@ -22,9 +22,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "Avatar": MessageLookupByLibrary.simpleMessage("الافاتار"),
     "Confirm_New_Password": MessageLookupByLibrary.simpleMessage(
       "تأكيد كلمه المرور",
     ),
+    "Create_Account": MessageLookupByLibrary.simpleMessage("انشاء حساب"),
     "Create_Watchlists": MessageLookupByLibrary.simpleMessage(
       "أنشئ قوائم مشاهدة",
     ),
