@@ -38,7 +38,7 @@ class AppStyle {
     fontSize: 20,
     fontWeight: FontWeight.w400,
   );
-static const TextStyle reglur17white = TextStyle(
+  static const TextStyle reglur17white = TextStyle(
     color: AppColor.whiteColor,
     fontSize: 17,
     fontWeight: FontWeight.w400,

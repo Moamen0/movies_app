@@ -15,8 +15,5 @@ class AppTheme {
           style: ButtonStyle(
         foregroundColor: WidgetStateProperty.all(AppColor.transparent),
         overlayColor: WidgetStateProperty.all(Colors.transparent),
-      )
-      )
-  );
-
+      )));
 }
