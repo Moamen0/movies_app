@@ -6,7 +6,7 @@ import 'package:movies_app/utils/app_style.dart';
 import 'package:movies_app/utils/custom_elevated_button.dart';
 
 class OnBoradingScrean extends StatelessWidget {
-  OnBoradingScrean({super.key});
+  const OnBoradingScrean({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +29,7 @@ class OnBoradingScrean extends StatelessWidget {
               Text(S.of(context).find_your_next_favorite_movie_Here,
                   textAlign: TextAlign.center, style: AppStyle.medium36white),
               SizedBox(height: height * 0.02),
-              Text(
-                  S.of(context).Get_access_to_ahuge,
+              Text(S.of(context).Get_access_to_ahuge,
                   textAlign: TextAlign.center,
                   style: AppStyle.reglur20whiteop60),
               SizedBox(height: height * 0.02),

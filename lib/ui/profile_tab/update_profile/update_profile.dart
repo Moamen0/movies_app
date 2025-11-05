@@ -8,7 +8,7 @@ import 'package:movies_app/utils/custom_elevated_button.dart';
 import 'package:movies_app/utils/custom_text_form_field.dart';
 
 class UpdateProfile extends StatefulWidget {
-  UpdateProfile({super.key});
+  const UpdateProfile({super.key});
 
   @override
   State<UpdateProfile> createState() => _UpdateProfileState();
