@@ -1,6 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -28,10 +29,9 @@ class S {
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name =
-        (locale.countryCode?.isEmpty ?? false)
-            ? locale.languageCode
-            : locale.toString();
+    final name = (locale.countryCode?.isEmpty ?? false)
+        ? locale.languageCode
+        : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -75,10 +75,10 @@ class S {
     return Intl.message('Password', name: 'password', desc: '', args: []);
   }
 
-  /// `Forget Password?`
+  /// `Forget Password`
   String get forgetPassword {
     return Intl.message(
-      'Forget Password?',
+      'Forget Password',
       name: 'forgetPassword',
       desc: '',
       args: [],
@@ -315,6 +315,16 @@ class S {
     return Intl.message(
       'Share your thoughts on the movies you\'ve watched. Dive deep into film details and help others discover great movies with your reviews.',
       name: 'Shareyourthoughts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verify Email`
+  String get VerifyEmail {
+    return Intl.message(
+      'Verify Email',
+      name: 'VerifyEmail',
       desc: '',
       args: [],
     );
