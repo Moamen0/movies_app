@@ -48,6 +48,11 @@ class AppStyle {
     fontSize: 20,
     fontWeight: FontWeight.w400,
   );
+  static const TextStyle reglur16white = TextStyle(
+    color: AppColor.whiteColor,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+  );
   static const TextStyle reglur20whiteop60 = TextStyle(
     color: AppColor.whiteopticay60,
     fontSize: 20,
