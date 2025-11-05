@@ -33,7 +33,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: AppBar(
         backgroundColor: AppColor.blackColor,
         title: Text(
-          S.of(context).createOne,
+          S.of(context).register,
           style: AppStyle.reglur16yellow,
         ),
         centerTitle: true,
@@ -75,7 +75,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               SizedBox(height: height * 0.01),
               Text(
-                "Avatar",
+                S.of(context).Avatar,
                 style: AppStyle.reglur16white,
               ),
               SizedBox(height: height * 0.01),
@@ -144,7 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               SizedBox(
                 width: double.infinity,
                 child: CustomElevatedButton(
-                    onPressed: () {}, text: S.of(context).login),
+                    onPressed: () {}, text: S.of(context).Create_Account),
               ),
               SizedBox(
                 height: height * 0.01,

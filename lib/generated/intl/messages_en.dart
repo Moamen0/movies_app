@@ -22,9 +22,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "Avatar": MessageLookupByLibrary.simpleMessage("Avatar"),
     "Confirm_New_Password": MessageLookupByLibrary.simpleMessage(
       "Confirm New Password",
     ),
+    "Create_Account": MessageLookupByLibrary.simpleMessage("Create Account"),
     "Create_Watchlists": MessageLookupByLibrary.simpleMessage(
       "Create Watchlists",
     ),
