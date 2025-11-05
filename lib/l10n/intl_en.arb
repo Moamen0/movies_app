@@ -4,7 +4,7 @@
     "description": "Description",
     "email": "Email",
     "password": "Password",
-    "forgetPassword": "Forget Password?",
+  "forgetPassword": "Forget Password",
     "login": "Login",
     "DontHaveAcc": "Don't Have Account?",
     "createOne": "Create one!",
@@ -32,6 +32,6 @@
   "Create_Watchlists": "Create Watchlists",
   "Save_movies_to_your_watchlist": "Save movies to your watchlist to keep track of what you want to watch next. Enjoy films in various qualities and genres.",
   "RateReviewandLearn": "Rate, Review, and Learn",
-  "Shareyourthoughts": "Share your thoughts on the movies you've watched. Dive deep into film details and help others discover great movies with your reviews."
-
+  "Shareyourthoughts": "Share your thoughts on the movies you've watched. Dive deep into film details and help others discover great movies with your reviews.",
+  "VerifyEmail": "Verify Email"
 }

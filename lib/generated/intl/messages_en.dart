@@ -62,7 +62,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "Start Watching Now",
     ),
     "Update_Data": MessageLookupByLibrary.simpleMessage("Update Data"),
-    "back": MessageLookupByLibrary.simpleMessage("Back"),
+        "VerifyEmail": MessageLookupByLibrary.simpleMessage("Verify Email"),
+        "back": MessageLookupByLibrary.simpleMessage("Back"),
     "createOne": MessageLookupByLibrary.simpleMessage("Create one!"),
     "description": MessageLookupByLibrary.simpleMessage("Description"),
     "email": MessageLookupByLibrary.simpleMessage("Email"),
@@ -71,8 +72,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Find Your Next  Favorite Movie Here",
     ),
     "finish": MessageLookupByLibrary.simpleMessage("Finish"),
-    "forgetPassword": MessageLookupByLibrary.simpleMessage("Forget Password?"),
-    "login": MessageLookupByLibrary.simpleMessage("Login"),
+        "forgetPassword":
+            MessageLookupByLibrary.simpleMessage("Forget Password"),
+        "login": MessageLookupByLibrary.simpleMessage("Login"),
     "loginWithGoogle": MessageLookupByLibrary.simpleMessage(
       "Login with Google",
     ),

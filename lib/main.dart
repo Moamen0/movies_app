@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:movies_app/auth/forget_password/forget_password.dart';
 import 'package:movies_app/generated/l10n.dart';
 import 'package:movies_app/onBorading/onBoradingItem.dart';
 import 'package:movies_app/onBorading/onBoradingScrean.dart';
@@ -38,6 +39,7 @@ class MoviesApp extends StatelessWidget {
         AppRoute.OnBoradingItem: (context) => OnBoradingItem(),
         AppRoute.updateProfile: (context) => UpdateProfile(),
         AppRoute.resetPassword: (context) => ResetPassword(),
+        AppRoute.forgetPassword: (context) => ForgetPassword(),
       },
       theme: AppTheme.theme,
     );
