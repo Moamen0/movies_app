@@ -7,6 +7,7 @@ import 'package:movies_app/utils/app_route.dart';
 import 'package:movies_app/utils/app_theme.dart';
 
 import 'auth/login_screen/login_screen.dart';
+import 'auth/register_screen/register_screen.dart';
 import 'ui/home_tab/home_tab.dart';
 
 void main() {
@@ -34,6 +35,7 @@ class MoviesApp extends StatelessWidget {
         AppRoute.loginScreen: (context) => LoginScreen(),
         AppRoute.onborading: (context) => OnBoradingScrean(),
         AppRoute.OnBoradingItem: (context) => OnBoradingItem(),
+        AppRoute.registerScreen: (context) => RegisterScreen(),
       },
       theme: AppTheme.theme,
     );

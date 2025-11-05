@@ -26,8 +26,8 @@ class _LoginScreenState extends State<LoginScreen> {
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: width * .05),
-        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: width * .05),
+      child: SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(
@@ -98,7 +98,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: AppStyle.reglur14white,
                   ),
                   TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context,AppRoute.registerScreen );
+                      },
                       child: Text(
                         S.of(context).createOne,
                         style: AppStyle.reglur14yellow,
