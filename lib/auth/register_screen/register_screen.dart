@@ -23,7 +23,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController? phoneController = TextEditingController();
   TextEditingController? confirmPasswordController = TextEditingController();
   int selectedAvatar = 1;
-  bool isCensored = true;
+  bool isPasswordObscured = true;
+  bool isRePasswordObscured  = true;
 
   @override
   Widget build(BuildContext context) {
@@ -98,15 +99,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
               CustomTextFormField(
                   controller: passwordController,
                   prefixIcon: Image.asset(AppAssets.passwordIcon),
-                  obscureText: isCensored,
+                  obscureText: isPasswordObscured,
                   hint: S.of(context).password,
                   suffixIcon: GestureDetector(
                     onTap: () {
                       setState(() {
-                        isCensored = !isCensored;
+                        isPasswordObscured = !isPasswordObscured;
                       });
                     },
-                    child: isCensored
+                    child: isPasswordObscured
                         ? Image.asset(AppAssets.eyeoff)
                         : const Icon(Icons.remove_red_eye_outlined,
                             color: Colors.white),
@@ -117,15 +118,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
               CustomTextFormField(
                   controller: confirmPasswordController,
                   prefixIcon: Image.asset(AppAssets.passwordIcon),
-                  obscureText: isCensored,
+                  obscureText: isRePasswordObscured,
                   hint: S.of(context).confirmPassword,
                   suffixIcon: GestureDetector(
                     onTap: () {
                       setState(() {
-                        isCensored = !isCensored;
+                        isRePasswordObscured = !isRePasswordObscured;
                       });
                     },
-                    child: isCensored
+                    child: isRePasswordObscured
                         ? Image.asset(AppAssets.eyeoff)
                         : const Icon(Icons.remove_red_eye_outlined,
                             color: Colors.white),
