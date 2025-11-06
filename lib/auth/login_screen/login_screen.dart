@@ -27,8 +27,8 @@ class _LoginScreenState extends State<LoginScreen> {
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: width * .05),
-      child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: width * .05),
+        child: SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(
@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: CustomElevatedButton(
                     onPressed: () {
                       Navigator.of(context)
-                          .pushReplacementNamed(AppRoute.home_tab);
+                          .pushReplacementNamed(AppRoute.updateProfile);
                     },
                     text: S.of(context).login),
               ),
@@ -102,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context,AppRoute.registerScreen );
+                        Navigator.pushNamed(context, AppRoute.registerScreen);
                       },
                       child: Text(
                         S.of(context).createOne,
@@ -138,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: CustomElevatedButton(
                   onPressed: () {
                     Navigator.of(context)
-                        .pushReplacementNamed(AppRoute.home_tab);
+                        .pushReplacementNamed(AppRoute.updateProfile);
                   },
                   hasIcon: true,
                   iconWidget: Image.asset(AppAssets.googleIcon),

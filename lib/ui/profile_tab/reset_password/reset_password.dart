@@ -6,12 +6,25 @@ import 'package:movies_app/utils/app_style.dart';
 import 'package:movies_app/utils/custom_elevated_button.dart';
 import 'package:movies_app/utils/custom_text_form_field.dart';
 
-class ResetPassword extends StatelessWidget {
+class ResetPassword extends StatefulWidget {
   ResetPassword({super.key});
 
+  @override
+  State<ResetPassword> createState() => _ResetPasswordState();
+}
+
+class _ResetPasswordState extends State<ResetPassword> {
   TextEditingController currentPasswordController = TextEditingController();
+
   TextEditingController newPasswordController = TextEditingController();
+
   TextEditingController confirmNewPasswordController = TextEditingController();
+
+  bool isCurrentPasswordObscured = true;
+
+  bool isPasswordObscured = true;
+
+  bool isConfirmPasswordObscured = true;
 
   @override
   Widget build(BuildContext context) {
@@ -37,25 +50,61 @@ class ResetPassword extends StatelessWidget {
               height: height * 0.05,
             ),
             CustomTextFormField(
-              labelStyle: AppStyle.reglur17white,
               controller: currentPasswordController,
-              label: S.of(context).Current_Password,
+              prefixIcon: Image.asset(AppAssets.passwordIcon),
+              obscureText: isCurrentPasswordObscured,
+              hint: S.of(context).Current_Password,
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isCurrentPasswordObscured = !isCurrentPasswordObscured;
+                  });
+                },
+                child: isCurrentPasswordObscured
+                    ? Image.asset(AppAssets.eyeoff)
+                    : const Icon(Icons.remove_red_eye_outlined,
+                        color: Colors.white),
+              ),
             ),
             SizedBox(
               height: height * 0.05,
             ),
             CustomTextFormField(
               controller: newPasswordController,
-              label: S.of(context).New_Password,
-              labelStyle: AppStyle.reglur17white,
+              prefixIcon: Image.asset(AppAssets.passwordIcon),
+              obscureText: isPasswordObscured,
+              hint: S.of(context).New_Password,
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isPasswordObscured = !isPasswordObscured;
+                  });
+                },
+                child: isPasswordObscured
+                    ? Image.asset(AppAssets.eyeoff)
+                    : const Icon(Icons.remove_red_eye_outlined,
+                        color: Colors.white),
+              ),
             ),
             SizedBox(
               height: height * 0.05,
             ),
             CustomTextFormField(
               controller: confirmNewPasswordController,
-              label: S.of(context).Current_Password,
-              labelStyle: AppStyle.reglur17white,
+              prefixIcon: Image.asset(AppAssets.passwordIcon),
+              obscureText: isConfirmPasswordObscured,
+              hint: S.of(context).Confirm_New_Password,
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isConfirmPasswordObscured = !isConfirmPasswordObscured;
+                  });
+                },
+                child: isConfirmPasswordObscured
+                    ? Image.asset(AppAssets.eyeoff)
+                    : const Icon(Icons.remove_red_eye_outlined,
+                        color: Colors.white),
+              ),
             ),
             Spacer(),
             SizedBox(
