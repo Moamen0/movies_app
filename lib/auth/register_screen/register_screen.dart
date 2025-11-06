@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/utils/app_color.dart';
+import 'package:movies_app/utils/app_route.dart';
 import 'package:movies_app/utils/app_style.dart';
 import 'package:movies_app/utils/custom_text_form_field.dart';
 
@@ -23,7 +24,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController? confirmPasswordController = TextEditingController();
 
   int selectedAvatar = 1;
-  bool isCensored = true;
+  bool isPasswordObscured = true;
+  bool isRePasswordObscured = true;
   late PageController avatarController;
 
   @override
@@ -46,6 +48,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         backgroundColor: AppColor.blackColor,
         title: Text(
           S.of(context).register,
@@ -129,15 +132,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
               CustomTextFormField(
                 controller: passwordController,
                 prefixIcon: Image.asset(AppAssets.passwordIcon),
-                obscureText: isCensored,
+                obscureText: isPasswordObscured,
                 hint: S.of(context).password,
                 suffixIcon: GestureDetector(
                   onTap: () {
                     setState(() {
-                      isCensored = !isCensored;
+                      isPasswordObscured = !isPasswordObscured;
                     });
                   },
-                  child: isCensored
+                  child: isPasswordObscured
                       ? Image.asset(AppAssets.eyeoff)
                       : const Icon(Icons.remove_red_eye_outlined,
                           color: Colors.white),
@@ -147,15 +150,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
               CustomTextFormField(
                 controller: confirmPasswordController,
                 prefixIcon: Image.asset(AppAssets.passwordIcon),
-                obscureText: isCensored,
+                obscureText: isRePasswordObscured,
                 hint: S.of(context).confirmPassword,
                 suffixIcon: GestureDetector(
                   onTap: () {
                     setState(() {
-                      isCensored = !isCensored;
+                      isRePasswordObscured = !isRePasswordObscured;
                     });
                   },
-                  child: isCensored
+                  child: isRePasswordObscured
                       ? Image.asset(AppAssets.eyeoff)
                       : const Icon(Icons.remove_red_eye_outlined,
                           color: Colors.white),
@@ -171,7 +174,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
               SizedBox(
                 width: double.infinity,
                 child: CustomElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushReplacementNamed(AppRoute.updateProfile);
+                  },
                   text: S.of(context).Create_Account,
                 ),
               ),
@@ -195,6 +201,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ],
               ),
               const LanguageToggle(),
+              SizedBox(height: height * 0.05),
             ],
           ),
         ),
