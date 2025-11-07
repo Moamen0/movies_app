@@ -128,54 +128,56 @@ class _UpdateProfileState extends State<UpdateProfile> {
         return Padding(
           padding: EdgeInsets.symmetric(
               vertical: height * 0.020, horizontal: width * 0.05),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: height * 0.01),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: height * 0.025,
-                  crossAxisSpacing: width * 0.04,
-                ),
-                itemCount: avatars.length,
-                itemBuilder: (context, index) {
-                  final avatar = avatars[index];
-                  final bool isSelected = avatar == selectedAvatar;
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: height * 0.01),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: height * 0.025,
+                    crossAxisSpacing: width * 0.04,
+                  ),
+                  itemCount: avatars.length,
+                  itemBuilder: (context, index) {
+                    final avatar = avatars[index];
+                    final bool isSelected = avatar == selectedAvatar;
 
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedAvatar = avatar;
-                      });
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? AppColor.yellow.withOpacity(0.5)
-                            : Colors.transparent,
-                        border: Border.all(
-                          color: AppColor.yellow,
-                          width: 2,
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedAvatar = avatar;
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? AppColor.yellow.withOpacity(0.5)
+                              : Colors.transparent,
+                          border: Border.all(
+                            color: AppColor.yellow,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.asset(avatar, fit: BoxFit.cover),
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.asset(avatar, fit: BoxFit.cover),
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(height: 16),
-            ],
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
           ),
         );
       },
