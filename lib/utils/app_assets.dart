@@ -23,6 +23,13 @@ class AppAssets {
   static const String onborading4 = 'assets/images/4onborading.png';
   static const String onborading5 = 'assets/images/5onborading.png';
   static const String onborading6 = 'assets/images/6onborading.png';
-  static const String forgetPasswordPhoto =
-      'assets/images/forgetPasswordPhoto.png';
+  static const String forgetPasswordPhoto = 'assets/images/forgetPasswordPhoto.png';
+  static const String selectedIconHome = "assets/images/selected_icon_home.png";
+  static const String selectedIconBrowser = "assets/images/selected_icon_browser.png";
+  static const String selectedIconSearch = "assets/images/selected_icon_search.png";
+  static const String selectedIconProfile = "assets/images/selected_icon_profile.png";
+  static const String unSelectedIconProfile = "assets/images/unSelected_icon_profile.png";
+  static const String unSelectedIconHome = "assets/images/unSelected_icon_home.png";
+  static const String unSelectedIconBrowser = "assets/images/unSelected_icon_browser.png";
+  static const String unSelectedIconSearch = "assets/images/unSelected_icon_search.png";
 }

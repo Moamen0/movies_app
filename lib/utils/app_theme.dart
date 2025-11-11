@@ -10,6 +10,12 @@ class AppTheme {
         titleTextStyle: AppStyle.reglur16yellow,
         backgroundColor: AppColor.blackColor,
       ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: AppColor.grayColor,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: AppColor.yellow,
+        unselectedItemColor: AppColor.whiteColor,
+      ),
       scaffoldBackgroundColor: AppColor.blackColor,
       textButtonTheme: TextButtonThemeData(
           style: ButtonStyle(
