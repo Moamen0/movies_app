@@ -33,7 +33,7 @@ class MoviesApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
-      initialRoute: AppRoute.homeScreen,
+      initialRoute: AppRoute.onborading,
       routes: {
         AppRoute.home_tab: (context) => HomeTab(),
         AppRoute.loginScreen: (context) => LoginScreen(),
