@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/api/api_model/movieResponse.dart';
+
+import '../../../api/api_model/MoviesResponse.dart';
 
 class Hometabitem extends StatelessWidget {
   List<Movies> movieList;

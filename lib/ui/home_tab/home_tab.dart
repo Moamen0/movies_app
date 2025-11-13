@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movies_app/api/api_manger.dart';
 import 'package:movies_app/ui/home_tab/home_tab_item/homeTabItem.dart';
 import 'package:movies_app/utils/app_color.dart';
+import 'package:movies_app/utils/app_style.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
@@ -20,7 +21,10 @@ class HomeTab extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Column(
             children: [
-              Text('SomeThing went wrong'),
+              Text(
+                snapshot.error.toString(),
+                style: AppStyle.bold16White,
+              ),
               ElevatedButton(
                   onPressed: () {
                     ApiManager.getMovies();
