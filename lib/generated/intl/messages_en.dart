@@ -65,6 +65,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Update_Data": MessageLookupByLibrary.simpleMessage("Update Data"),
     "VerifyEmail": MessageLookupByLibrary.simpleMessage("Verify Email"),
+    "action": MessageLookupByLibrary.simpleMessage("Action"),
     "alreadyHaveAccount": MessageLookupByLibrary.simpleMessage(
       "Already Have Account ? ",
     ),
