@@ -10,7 +10,7 @@ class ApiManager {
     try {
       Uri url = Uri.https(Endpoint.serverName, Endpoint.ApiName,
         {
-          "sort_by":'rating'
+          "sort_by":'date_added'
         }
       );
       var response = await http.get(url);
