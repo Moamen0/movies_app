@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:movies_app/api/api_manger.dart';
 import 'package:movies_app/utils/app_color.dart';
 import 'package:movies_app/utils/app_route.dart';
 import 'package:movies_app/utils/app_style.dart';
 import 'package:movies_app/utils/custom_text_form_field.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../animated_toggle_switch/animated_toggle_switch.dart';
 import '../../generated/l10n.dart';
@@ -17,16 +19,19 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  TextEditingController? emailController = TextEditingController();
-  TextEditingController? passwordController = TextEditingController();
-  TextEditingController? nameController = TextEditingController();
-  TextEditingController? phoneController = TextEditingController();
-  TextEditingController? confirmPasswordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
 
   int selectedAvatar = 1;
   bool isPasswordObscured = true;
   bool isRePasswordObscured = true;
   late PageController avatarController;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -38,7 +43,110 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void dispose() {
     avatarController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    nameController.dispose();
+    phoneController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _register() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      print("=== REGISTER FORM DATA ===");
+      print("Name: ${nameController.text.trim()}");
+      print("Email: ${emailController.text.trim()}");
+      print("Password: ${passwordController.text.trim()}");
+      print("Confirm Password: ${confirmPasswordController.text.trim()}");
+      print("Phone: ${phoneController.text.trim()}");
+      print("Avatar Index: $selectedAvatar");
+      print("Avatar ID: ${selectedAvatar + 1}");
+      print("==========================");
+
+      final res = await ApiManger.register(
+        name: nameController.text.trim(),
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+        confirmPassword: confirmPasswordController.text.trim(),
+        phone: phoneController.text.trim(),
+        avatar: (selectedAvatar + 1).toString(),
+      );
+
+      if (!mounted) return;
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if (res.success) {
+        if (res.data != null && res.data!.token != null) {
+          // Has token - save it and navigate to home
+          final token = res.data!.token;
+
+          if (token != null && token.isNotEmpty) {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setString("token", token);
+
+            // Save user info if available
+     
+
+            if (!mounted) return;
+
+            // Navigate to home screen after successful registration
+            Navigator.of(context).pushReplacementNamed(AppRoute.home_tab);
+
+            // Show success message
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(res.message ?? "تم التسجيل بنجاح"),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          }
+        } else {
+          // Registration successful but no token - need to login
+          if (!mounted) return;
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(res.message ?? "تم التسجيل بنجاح"),
+              backgroundColor: Colors.green,
+              duration: const Duration(seconds: 3),
+            ),
+          );
+
+          // Navigate back to login screen
+          Navigator.of(context).pop();
+        }
+      } else {
+        _showErrorSnackBar(res.message ?? "حدث خطأ في التسجيل");
+      }
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        isLoading = false;
+      });
+
+      _showErrorSnackBar("حدث خطأ: ${e.toString()}");
+    }
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 
   @override
@@ -50,159 +158,212 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: AppBar(
         scrolledUnderElevation: 0,
         backgroundColor: AppColor.blackColor,
-        title: Text(
-          S.of(context).register,
-          style: AppStyle.reglur16yellow,
-        ),
+        title: Text(S.of(context).register, style: AppStyle.reglur16yellow),
         centerTitle: true,
         iconTheme: IconThemeData(color: AppColor.yellow),
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: width * 0.04),
-          child: Column(
-            children: [
-              SizedBox(height: height * 0.01),
-              SizedBox(
-                height: 160,
-                child: PageView.builder(
-                  controller: avatarController,
-                  itemCount: 9,
-                  onPageChanged: (index) {
-                    setState(() {
-                      selectedAvatar = index;
-                    });
-                  },
-                  itemBuilder: (context, index) {
-                    final bool isSelected = selectedAvatar == index;
-                    return Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          avatarController.animateToPage(
-                            index,
-                            duration: const Duration(milliseconds: 300),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                SizedBox(height: height * 0.01),
+                SizedBox(
+                  height: 160,
+                  child: PageView.builder(
+                    controller: avatarController,
+                    itemCount: 9,
+                    onPageChanged: (index) {
+                      setState(() {
+                        selectedAvatar = index;
+                      });
+                    },
+                    itemBuilder: (context, index) {
+                      final bool isSelected = selectedAvatar == index;
+                      return Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            avatarController.animateToPage(
+                              index,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                            setState(() {
+                              selectedAvatar = index;
+                            });
+                          },
+                          child: AnimatedScale(
+                            scale: isSelected ? 1.25 : 1.0,
+                            duration: const Duration(milliseconds: 250),
                             curve: Curves.easeInOut,
-                          );
-                          setState(() {
-                            selectedAvatar = index;
-                          });
-                        },
-                        child: AnimatedScale(
-                          scale: isSelected ? 1.25 : 1.0,
-                          duration: const Duration(milliseconds: 250),
-                          curve: Curves.easeInOut,
-                          child: Container(
-                            width: isSelected ? 110 : 80,
-                            height: isSelected ? 110 : 80,
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                            ),
-                            child: ClipOval(
-                              child: Image.asset(
-                                'assets/images/avatar${index + 1}.png',
-                                fit: BoxFit.cover,
+                            child: Container(
+                              width: isSelected ? 110 : 80,
+                              height: isSelected ? 110 : 80,
+                              margin: const EdgeInsets.symmetric(horizontal: 8),
+                              decoration: BoxDecoration(shape: BoxShape.circle),
+                              child: ClipOval(
+                                child: Image.asset(
+                                  'assets/images/avatar${index + 1}.png',
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              SizedBox(height: height * 0.01),
-              Text(
-                S.of(context).Avatar,
-                style: AppStyle.reglur16white,
-              ),
-              SizedBox(height: height * 0.02),
-              CustomTextFormField(
-                controller: nameController,
-                prefixIcon: Image.asset(AppAssets.nameIcon),
-                hint: S.of(context).name,
-              ),
-              SizedBox(height: height * .024),
-              CustomTextFormField(
-                controller: emailController,
-                prefixIcon: Image.asset(AppAssets.emailIcon),
-                hint: S.of(context).email,
-              ),
-              SizedBox(height: height * .024),
-              CustomTextFormField(
-                controller: passwordController,
-                prefixIcon: Image.asset(AppAssets.passwordIcon),
-                obscureText: isPasswordObscured,
-                hint: S.of(context).password,
-                suffixIcon: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isPasswordObscured = !isPasswordObscured;
-                    });
-                  },
-                  child: isPasswordObscured
-                      ? Image.asset(AppAssets.eyeoff)
-                      : const Icon(Icons.remove_red_eye_outlined,
-                          color: Colors.white),
-                ),
-              ),
-              SizedBox(height: height * .024),
-              CustomTextFormField(
-                controller: confirmPasswordController,
-                prefixIcon: Image.asset(AppAssets.passwordIcon),
-                obscureText: isRePasswordObscured,
-                hint: S.of(context).confirmPassword,
-                suffixIcon: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isRePasswordObscured = !isRePasswordObscured;
-                    });
-                  },
-                  child: isRePasswordObscured
-                      ? Image.asset(AppAssets.eyeoff)
-                      : const Icon(Icons.remove_red_eye_outlined,
-                          color: Colors.white),
-                ),
-              ),
-              SizedBox(height: height * .024),
-              CustomTextFormField(
-                controller: phoneController,
-                prefixIcon: Image.asset(AppAssets.phoneIcon),
-                hint: S.of(context).phoneNumber,
-              ),
-              SizedBox(height: height * .024),
-              SizedBox(
-                width: double.infinity,
-                child: CustomElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushReplacementNamed(AppRoute.updateProfile);
-                  },
-                  text: S.of(context).Create_Account,
-                ),
-              ),
-              SizedBox(height: height * 0.01),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    S.of(context).alreadyHaveAccount,
-                    style: AppStyle.reglur14white,
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
+                      );
                     },
-                    child: Text(
-                      S.of(context).login,
-                      style: AppStyle.reglur14yellow,
-                    ),
                   ),
-                ],
-              ),
-              const LanguageToggle(),
-              SizedBox(height: height * 0.05),
-            ],
+                ),
+                SizedBox(height: height * 0.01),
+                Text(S.of(context).Avatar, style: AppStyle.reglur16white),
+                SizedBox(height: height * 0.02),
+                
+                // NAME FIELD
+                CustomTextFormField(
+                  controller: nameController,
+                  prefixIcon: Image.asset(AppAssets.nameIcon),
+                  hint: S.of(context).name,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return "يرجى إدخال الاسم";
+                    }
+                    if (value.trim().length < 3) {
+                      return "الاسم يجب أن يكون 3 أحرف على الأقل";
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: height * .024),
+                
+                // EMAIL FIELD
+                CustomTextFormField(
+                  controller: emailController,
+                  prefixIcon: Image.asset(AppAssets.emailIcon),
+                  hint: S.of(context).email,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return "يرجى إدخال البريد الإلكتروني";
+                    }
+                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                        .hasMatch(value)) {
+                      return "البريد الإلكتروني غير صحيح";
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: height * .024),
+                
+                // PASSWORD FIELD - UPDATED WITH STRONG PASSWORD VALIDATION
+                CustomTextFormField(
+                  controller: passwordController,
+                  prefixIcon: Image.asset(AppAssets.passwordIcon),
+                  obscureText: isPasswordObscured,
+                  hint: S.of(context).password,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "يرجى إدخال كلمة المرور";
+                    }
+                    if (value.length < 8) {
+                      return "كلمة المرور يجب أن تكون 8 أحرف على الأقل";
+                    }
+                    // Check for strong password (uppercase, lowercase, number)
+                    final strongPasswordRegex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$');
+                    if (!strongPasswordRegex.hasMatch(value)) {
+                      return "يجب أن تحتوي على حرف كبير وصغير ورقم";
+                    }
+                    return null;
+                  },
+                  suffixIcon: GestureDetector(
+                    onTap: () => setState(
+                        () => isPasswordObscured = !isPasswordObscured),
+                    child: isPasswordObscured
+                        ? Image.asset(AppAssets.eyeoff)
+                        : const Icon(Icons.remove_red_eye_outlined,
+                            color: Colors.white),
+                  ),
+                ),
+                SizedBox(height: height * .024),
+                
+                // CONFIRM PASSWORD FIELD
+                CustomTextFormField(
+                  controller: confirmPasswordController,
+                  prefixIcon: Image.asset(AppAssets.passwordIcon),
+                  obscureText: isRePasswordObscured,
+                  hint: S.of(context).confirmPassword,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "يرجى تأكيد كلمة المرور";
+                    }
+                    if (value != passwordController.text) {
+                      return "كلمة المرور غير مطابقة";
+                    }
+                    return null;
+                  },
+                  suffixIcon: GestureDetector(
+                    onTap: () => setState(
+                        () => isRePasswordObscured = !isRePasswordObscured),
+                    child: isRePasswordObscured
+                        ? Image.asset(AppAssets.eyeoff)
+                        : const Icon(Icons.remove_red_eye_outlined,
+                            color: Colors.white),
+                  ),
+                ),
+                SizedBox(height: height * .024),
+                
+                // PHONE FIELD - UPDATED WITH EGYPTIAN FORMAT VALIDATION
+                CustomTextFormField(
+                  controller: phoneController,
+                  prefixIcon: Image.asset(AppAssets.phoneIcon),
+                  hint: S.of(context).phoneNumber,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return "يرجى إدخال رقم الهاتف";
+                    }
+                    // Egyptian phone number format validation
+                    final phoneRegex = RegExp(r'^(010|011|012|015)\d{8}$');
+                    if (!phoneRegex.hasMatch(value.trim())) {
+                      return "رقم غير صحيح (مثال: 01012345678)";
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: height * .024),
+                
+                // REGISTER BUTTON
+                SizedBox(
+                  width: double.infinity,
+                  child: CustomElevatedButton(
+                    onPressed: () {
+                      if (!isLoading) {
+                        _register();
+                      }
+                    },
+                    text: isLoading
+                        ? "جاري التسجيل..."
+                        : S.of(context).Create_Account,
+                  ),
+                ),
+                SizedBox(height: height * 0.01),
+                
+                // ALREADY HAVE ACCOUNT
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(S.of(context).alreadyHaveAccount,
+                        style: AppStyle.reglur14white),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(S.of(context).login,
+                          style: AppStyle.reglur14yellow),
+                    ),
+                  ],
+                ),
+                const LanguageToggle(),
+                SizedBox(height: height * 0.05),
+              ],
+            ),
           ),
         ),
       ),
