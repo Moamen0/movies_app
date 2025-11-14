@@ -8,7 +8,23 @@ import 'api_model/MoviesResponse.dart';
 class ApiManager {
   static Future<MoviesResponse> getMovies() async {
     try {
-      Uri url = Uri.https(Endpoint.serverName, Endpoint.ApiName);
+      Uri url = Uri.https(Endpoint.serverName, Endpoint.ApiName,
+        {
+          "sort_by":'rating'
+        }
+      );
+      var response = await http.get(url);
+      return MoviesResponse.fromJson(jsonDecode(response.body));
+    } catch (e) {
+      rethrow;
+    }
+  }
+  static Future<MoviesResponse> getMoviesByGenre(String genre) async {
+    try {
+      Uri url = Uri.https(Endpoint.serverName, Endpoint.ApiName,{
+        "genre":genre,
+        "sort_by":'rating'
+      });
       var response = await http.get(url);
       return MoviesResponse.fromJson(jsonDecode(response.body));
     } catch (e) {
