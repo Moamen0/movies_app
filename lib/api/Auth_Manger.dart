@@ -4,7 +4,7 @@ import 'package:movies_app/auth/forget_password/forget_password.dart';
 import 'package:movies_app/model/api_Response_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ApiManger {
+class AuthMangerApi {
   static const String baseUrl = 'https://route-movie-apis.vercel.app';
 
   // ===================== LOGIN =====================

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/api/api_manger.dart';
+import 'package:movies_app/api/Auth_Manger.dart';
 import 'package:movies_app/model/api_Response_model.dart';
 import 'package:movies_app/generated/l10n.dart';
 import 'package:movies_app/utils/app_assets.dart';
@@ -46,7 +46,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
   try {
     print("🔹 Fetching profile from API...");
-    final response = await ApiManger.getProfile();
+    final response = await AuthMangerApi.getProfile();
 
     print("🔹 API Response: ${response.toString()}");
 
@@ -57,13 +57,13 @@ class _UpdateProfileState extends State<UpdateProfile> {
         print("✅ Profile loaded from API: $currentUser");
 
         // حفظ البيانات محليًا
-        await ApiManger.saveUserData(currentUser!);
+        await AuthMangerApi.saveUserData(currentUser!);
       } else {
         print("❌ API returned data but it's not UserModel: ${response.data.runtimeType}");
       }
     } else {
       print("⚠ API failed, loading local data...");
-      currentUser = await ApiManger.getUserData();
+      currentUser = await AuthMangerApi.getUserData();
       if (currentUser != null) {
         print("✅ Profile loaded from local storage: $currentUser");
       }
@@ -102,7 +102,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
       final avaterId =
           avaterIdString != null ? int.parse(avaterIdString) : null;
 
-      final response = await ApiManger.updateProfile(
+      final response = await AuthMangerApi.updateProfile(
         name: userNameController.text.trim(),
         phone: phoneNumberController.text.trim(),
         avatar: avaterId?.toString(),
@@ -121,7 +121,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
         );
 
         currentUser = updatedUser;
-        await ApiManger.saveUserData(updatedUser);
+        await AuthMangerApi.saveUserData(updatedUser);
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -168,7 +168,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
     setState(() => isUpdating = true);
 
     try {
-      final response = await ApiManger.deleteProfile();
+      final response = await AuthMangerApi.deleteProfile();
 
       if (!mounted) return;
       setState(() => isUpdating = false);

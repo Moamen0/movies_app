@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/api/api_manger.dart';
+import 'package:movies_app/api/Auth_Manger.dart';
 import 'package:movies_app/utils/app_assets.dart';
 import 'package:movies_app/utils/app_color.dart';
 import 'package:movies_app/utils/app_style.dart';
@@ -43,7 +43,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
     });
 
     try {
-      final res = await ApiManger.ForgetPassword(
+      final res = await AuthMangerApi.ForgetPassword(
         email: emailController.text.trim(),
         newPassword: newPasswordController.text.trim(),
       );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/api/api_manger.dart';
+import 'package:movies_app/api/Auth_Manger.dart';
 import 'package:movies_app/utils/app_assets.dart';
 import 'package:movies_app/utils/app_color.dart';
 import 'package:movies_app/utils/app_route.dart';
@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      final res = await ApiManger.login(
+      final res = await AuthMangerApi.login(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (token != null && token.isNotEmpty) {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.remove('user_data');
-          await ApiManger.saveToken(token);
+          await AuthMangerApi.saveToken(token);
           // ✅ عرض رسالة نجاح
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

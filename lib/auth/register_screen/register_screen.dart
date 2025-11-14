@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/api/api_manger.dart';
+import 'package:movies_app/api/Auth_Manger.dart';
 import 'package:movies_app/utils/app_color.dart';
 import 'package:movies_app/utils/app_route.dart';
 import 'package:movies_app/utils/app_style.dart';
@@ -69,7 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       print("Avatar ID: ${selectedAvatar + 1}");
       print("==========================");
 
-      final res = await ApiManger.register(
+      final res = await AuthMangerApi.register(
         name: nameController.text.trim(),
         email: emailController.text.trim(),
         password: passwordController.text.trim(),

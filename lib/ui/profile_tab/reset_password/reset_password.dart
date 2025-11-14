@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/api/api_manger.dart';
+import 'package:movies_app/api/Auth_Manger.dart';
 import 'package:movies_app/generated/l10n.dart';
 import 'package:movies_app/utils/app_assets.dart';
 import 'package:movies_app/utils/app_color.dart';
@@ -44,7 +44,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
     try {
       // استدعاء API لتغيير كلمة المرور مع oldPassword و newPassword
-      final res = await ApiManger.resetPassword(
+      final res = await AuthMangerApi.resetPassword(
         oldPassword: currentPasswordController.text.trim(),
         newPassword: newPasswordController.text.trim(),
       );
@@ -58,12 +58,10 @@ class _ResetPasswordState extends State<ResetPassword> {
       if (res.success) {
         _showSuccessSnackBar(res.message ?? "تم تغيير كلمة المرور بنجاح");
 
-        // مسح الحقول
         currentPasswordController.clear();
         newPasswordController.clear();
         confirmNewPasswordController.clear();
 
-        // الرجوع للصفحة السابقة بعد ثانيتين
         Future.delayed(const Duration(seconds: 2), () {
           if (mounted) {
             Navigator.pop(context);
