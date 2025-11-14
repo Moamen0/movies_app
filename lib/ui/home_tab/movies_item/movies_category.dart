@@ -1,16 +1,18 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:movies_app/api/api_manger.dart';
-import 'package:movies_app/ui/home_tab/home_tab_item/homeTabItem.dart';
-import 'package:movies_app/utils/app_color.dart';
-import 'package:movies_app/utils/app_style.dart';
 
-class HomeTab extends StatelessWidget {
-  const HomeTab({super.key});
+import '../../../api/api_manger.dart';
+import '../../../utils/app_color.dart';
+import '../../../utils/app_style.dart';
+import '../home_tab_item/homeTabItem.dart';
+
+class MoviesCategory extends StatelessWidget {
+  const MoviesCategory({super.key});
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: ApiManager.getMovies(),
+      future: ApiManager.getMoviesByGenre('Action'),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
@@ -45,8 +47,8 @@ class HomeTab extends StatelessWidget {
             ],
           );
         }
-        var moviesList = snapshot.data?.data?.movies ?? [];
-        return Hometabitem(movieList: moviesList);
+        var actionMovies = snapshot.data?.data?.movies ?? [];
+        return Hometabitem(movieList: actionMovies);
       },
     );
   }

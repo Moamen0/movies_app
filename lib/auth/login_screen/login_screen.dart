@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: CustomElevatedButton(
                     onPressed: () {
                       Navigator.of(context)
-                          .pushReplacementNamed(AppRoute.updateProfile);
+                          .pushReplacementNamed(AppRoute.homeScreen);
                     },
                     text: S.of(context).login),
               ),

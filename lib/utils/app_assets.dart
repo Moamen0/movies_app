@@ -32,4 +32,6 @@ class AppAssets {
   static const String unSelectedIconHome = "assets/images/unSelected_icon_home.png";
   static const String unSelectedIconBrowser = "assets/images/unSelected_icon_browser.png";
   static const String unSelectedIconSearch = "assets/images/unSelected_icon_search.png";
+  static const String availableNow = "assets/images/Available Now.png";
+  static const String watchNow = "assets/images/Watch Now.png";
 }
