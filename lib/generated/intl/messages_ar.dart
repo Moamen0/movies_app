@@ -67,6 +67,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Update_Data": MessageLookupByLibrary.simpleMessage("تحديث البيانات"),
     "VerifyEmail": MessageLookupByLibrary.simpleMessage("تأكيد الحساب"),
+    "action": MessageLookupByLibrary.simpleMessage("اكشن"),
     "alreadyHaveAccount": MessageLookupByLibrary.simpleMessage(
       "هل لديك حساب بالفعل؟",
     ),
