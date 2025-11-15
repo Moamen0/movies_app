@@ -27,17 +27,14 @@ class MoviesItem extends StatelessWidget {
               horizontal: width*0.02,
               vertical: height*0.01
             ),
-            padding: EdgeInsets.symmetric(
-              horizontal: width*0.005,
-              vertical: height*0.003
-            ),
-            width: width*0.13,
-            height: height*0.03 ,
+            width: width * 0.16,
+            height: height * 0.05,
             decoration: BoxDecoration(
               color: AppColor.blackTransparentColor,
               borderRadius: BorderRadius.circular(10)
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('${movie.rating}',style: AppStyle.bold16White,),
                 Icon(Icons.star,color: AppColor.yellow,)

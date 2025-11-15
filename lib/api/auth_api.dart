@@ -1,6 +1,6 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
-import 'package:movies_app/auth/forget_password/forget_password.dart';
 import 'package:movies_app/model/Api_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,25 +34,25 @@ class AuthMangerApi {
         if (auth.token != null && auth.token!.isNotEmpty) {
           return ApiResponse(
             success: true,
-            message: json["message"] ?? "تم تسجيل الدخول بنجاح",
+            message: json["message"] ?? "login success!",
             data: auth,
           );
         }
 
         return ApiResponse(
           success: false,
-          message: "لم يتم استلام التوكن",
+          message: "",
         );
       }
 
       return ApiResponse(
         success: false,
-        message: json["message"] ?? "فشل تسجيل الدخول",
+        message: json["message"] ?? "login field please try again",
       );
     } catch (e) {
       return ApiResponse(
         success: false,
-        message: "حدث خطأ أثناء تسجيل الدخول: $e",
+        message: "$e",
       );
     }
   }
@@ -117,17 +117,17 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
         password.isEmpty ||
         phone.trim().isEmpty ||
         avatar.isEmpty) {
-      return ApiResponse(success: false, message: "جميع الحقول مطلوبة");
+      return ApiResponse(success: false, message: "all fields are required");
     }
 
     if (password != confirmPassword) {
-      return ApiResponse(success: false, message: "كلمة المرور غير مطابقة");
+      return ApiResponse(success: false, message: "passwords isn't match");
     }
 
     if (password.length < 8) {
       return ApiResponse(
         success: false,
-        message: "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
+        message: "password must be at least 8 chars",
       );
     }
 
@@ -137,7 +137,8 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
     if (!strongPasswordRegex.hasMatch(password)) {
       return ApiResponse(
         success: false,
-        message: "كلمة المرور يجب أن تحتوي على حرف كبير وحرف صغير ورقم",
+        message:
+            "The password must contain at least one lowercase letter, one uppercase letter, and one special character such as @",
       );
     }
 
@@ -154,7 +155,7 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
       if (avaterId == null) {
         return ApiResponse(
           success: false,
-          message: "خطأ في اختيار الصورة الرمزية",
+          message: "error",
         );
       }
 
@@ -189,7 +190,7 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
               json["message"].toString().contains("successfully")) {
             return ApiResponse(
               success: true,
-              message: "تم التسجيل بنجاح. يرجى تسجيل الدخول",
+              message: "register complete please login!",
               data: null,
             );
           } else if (json["status"] == true) {
@@ -202,29 +203,29 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
 
             return ApiResponse(
               success: true,
-              message: json["message"] ?? "تم التسجيل بنجاح",
+              message: json["message"] ?? "login successfully",
               data: auth,
             );
           } else {
             return ApiResponse(
               success: false,
-              message: json["message"] ?? "فشل التسجيل",
+              message: json["message"] ?? "login failed",
             );
           }
         } else {
           return ApiResponse(
             success: false,
-            message: "الخادم لم يرجع استجابة صحيحة",
+            message: "server didn't answer",
           );
         }
       } else if (response.statusCode == 409 || response.statusCode == 400) {
         try {
           final json = jsonDecode(response.body);
-          String errorMessage = json["message"] ?? "فشل التسجيل";
+          String errorMessage = json["message"] ?? "login field";
 
           if (errorMessage.toLowerCase().contains("already") ||
               errorMessage.toLowerCase().contains("exist")) {
-            errorMessage = "البريد الإلكتروني مسجل مسبقاً. يرجى تسجيل الدخول";
+            errorMessage = "emailAdress already Exist please login!";
           }
 
           return ApiResponse(
@@ -234,7 +235,8 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
         } catch (e) {
           return ApiResponse(
             success: false,
-            message: "البريد الإلكتروني مسجل مسبقاً",
+            message:
+                "The password must contain at least one lowercase letter, one uppercase letter, and one special character such as @",
           );
         }
       } else {
@@ -242,25 +244,25 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
           final json = jsonDecode(response.body);
           return ApiResponse(
             success: false,
-            message: json["message"] ?? "خطأ في الخادم",
+            message: json["message"] ?? "network error",
           );
         } catch (e) {
           return ApiResponse(
             success: false,
-            message: "خطأ في الاتصال بالخادم (${response.statusCode})",
+            message: "${response.statusCode})",
           );
         }
       }
     } catch (e) {
       print("Register Error: $e");
 
-      String errorMessage = "حدث خطأ أثناء التسجيل";
+      String errorMessage = "error while processing";
 
       if (e.toString().contains("SocketException") ||
           e.toString().contains("Failed host lookup")) {
-        errorMessage = "تحقق من اتصال الإنترنت";
+        errorMessage = "check your network connection";
       } else if (e.toString().contains("TimeoutException")) {
-        errorMessage = "انتهت مهلة الاتصال. حاول مرة أخرى";
+        errorMessage = "please try again";
       }
 
       return ApiResponse(
@@ -277,7 +279,7 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
       if (email.trim().isEmpty) {
         return ApiResponse(
           success: false,
-          message: "يرجى إدخال البريد الإلكتروني",
+          message: "please enter you emailAddress",
           data: false,
         );
       }
@@ -295,19 +297,19 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
         final json = jsonDecode(response.body);
         return ApiResponse(
           success: true,
-          message: "البريد الإلكتروني موجود",
+          message: "emailAdress Exist",
           data: true,
         );
       } else if (response.statusCode == 404) {
         return ApiResponse(
           success: false,
-          message: "البريد الإلكتروني غير مسجل",
+          message: "emailAdress Not Found",
           data: false,
         );
       } else {
         return ApiResponse(
           success: false,
-          message: "خطأ في التحقق من البريد الإلكتروني",
+          message: "error while checking on emailAddress",
           data: false,
         );
       }
@@ -315,7 +317,7 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
       print("Check Email Error: $e");
       return ApiResponse(
         success: false,
-        message: "حدث خطأ في التحقق",
+        message: "unExpected error happend try again",
         data: false,
       );
     }
@@ -330,7 +332,7 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
       if (email.trim().isEmpty || newPassword.isEmpty) {
         return ApiResponse(
           success: false,
-          message: "البريد الإلكتروني وكلمة المرور الجديدة مطلوبان",
+          message: "emailAdress and password are required",
         );
       }
 
@@ -352,30 +354,30 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
         if (json["status"] == true) {
           return ApiResponse(
             success: true,
-            message: json["message"] ?? "تم تغيير كلمة المرور بنجاح",
+            message: json["message"] ?? "password Changed successfully",
           );
         } else {
           return ApiResponse(
             success: false,
-            message: json["message"] ?? "فشل تغيير كلمة المرور",
+            message: json["message"] ?? "update password failed",
           );
         }
       } else if (response.statusCode == 404) {
         return ApiResponse(
           success: false,
-          message: "البريد الإلكتروني غير موجود",
+          message: "emailAdress not Found",
         );
       } else {
         return ApiResponse(
           success: false,
-          message: "خطأ في الاتصال بالخادم",
+          message: "error while connecting to network",
         );
       }
     } catch (e) {
       print("Reset Password Error: $e");
       return ApiResponse(
         success: false,
-        message: "حدث خطأ: ${e.toString()}",
+        message: e.toString(),
       );
     }
   }
@@ -387,8 +389,8 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
   try {
     final token = await getToken();
     if (token == null || token.isEmpty) {
-      return ApiResponse(success: false, message: "يرجى تسجيل الدخول أولاً");
-    }
+        return ApiResponse(success: false, message: "please login first");
+      }
 
     final response = await http.patch(
       Uri.parse('$baseUrl/auth/reset-password'),
@@ -409,14 +411,14 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
       final json = jsonDecode(response.body);
       return ApiResponse(
         success: true,
-        message: json["message"] ?? "تم تغيير كلمة المرور بنجاح",
-      );
+          message: json["message"] ?? "password Changed successfully",
+        );
     } else {
       final json = jsonDecode(response.body);
       return ApiResponse(
         success: false,
-        message: json["message"] ?? "فشل تغيير كلمة المرور",
-      );
+          message: json["message"] ?? "couldn't update password",
+        );
     }
   } catch (e) {
     print("Reset Password Error: $e");
@@ -432,7 +434,7 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
     try {
       final token = await getToken();
       if (token == null || token.isEmpty) {
-        return ApiResponse(success: false, message: "يرجى تسجيل الدخول أولاً");
+        return ApiResponse(success: false, message: "please login first");
       }
 
       final response = await http.get(
@@ -455,12 +457,12 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
       } else if (response.statusCode == 401) {
         // إذا انتهت صلاحية الجلسة
         await logout();
-        return ApiResponse(success: false, message: "انتهت صلاحية الجلسة");
+        return ApiResponse(success: false, message: "session ended");
       } else {
-        return ApiResponse(success: false, message: "فشل جلب البيانات");
+        return ApiResponse(success: false, message: "failed get the data");
       }
     } catch (e) {
-      return ApiResponse(success: false, message: "حدث خطأ: $e");
+      return ApiResponse(success: false, message: "$e");
     }
   }
 
@@ -477,17 +479,15 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
     if (token == null || token.isEmpty) {
       return ApiResponse(
         success: false,
-        message: "يرجى تسجيل الدخول أولاً",
-      );
+          message: "please Login first!",
+        );
     }
 
-    // تجهيز body حسب المتاح
     Map<String, dynamic> body = {};
     if (email != null) body["email"] = email;
     if (name != null) body["name"] = name;
     if (phone != null) body["phone"] = phone;
 
-    // avatar = رقم فقط لذلك نضيف avaterId
     if (avatar != null) {
       int? id = int.tryParse(avatar);
       if (id != null) body["avaterId"] = id;
@@ -509,25 +509,25 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
     if (response.statusCode == 200) {
       return ApiResponse(
         success: true,
-        message: "تم تحديث الملف الشخصي بنجاح",
-      );
+          message: "profile updated successfully",
+        );
     } else if (response.statusCode == 401) {
       await logout();
       return ApiResponse(
         success: false,
-        message: "انتهت صلاحية الجلسة",
-      );
+          message: "session ended",
+        );
     } else {
       return ApiResponse(
         success: false,
-        message: "فشل تحديث الملف الشخصي",
-      );
+          message: "failed update profile",
+        );
     }
   } catch (e) {
     return ApiResponse(
       success: false,
-      message: "حدث خطأ: ${e.toString()}",
-    );
+        message: e.toString(),
+      );
   }
 }
 
@@ -539,7 +539,7 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
       if (token == null || token.isEmpty) {
         return ApiResponse(
           success: false,
-          message: "يرجى تسجيل الدخول أولاً",
+          message: "please login first",
         );
       }
 
@@ -558,30 +558,29 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
           await logout();
           return ApiResponse(
             success: true,
-            message: json["message"] ?? "تم حذف الحساب",
+            message: json["message"] ?? "account deleted",
           );
         } else {
           return ApiResponse(
             success: false,
-            message: json["message"] ?? "فشل حذف الحساب",
+            message: json["message"] ?? "failed deleting the account",
           );
         }
       } else {
         return ApiResponse(
           success: false,
-          message: "خطأ في الاتصال بالخادم",
+          message: "connection error",
         );
       }
     } catch (e) {
       print("Delete Profile Error: $e");
       return ApiResponse(
         success: false,
-        message: "حدث خطأ: ${e.toString()}",
+        message: "${e.toString()}",
       );
     }
   }
 
-  // ===================== GET MOVIES =====================
   static Future<ApiResponse<MoviesResponse>> getMovies() async {
     try {
       final response = await http.get(
@@ -597,20 +596,20 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
 
         return ApiResponse(
           success: true,
-          message: 'تم تحميل الأفلام بنجاح',
+          message: '',
           data: moviesResponse,
         );
       } else {
         return ApiResponse(
           success: false,
-          message: 'فشل تحميل الأفلام',
+          message: 'error loading movies',
         );
       }
     } catch (e) {
       print('Get Movies Error: $e');
       return ApiResponse(
         success: false,
-        message: 'حدث خطأ في الاتصال: ${e.toString()}',
+        message: e.toString(),
       );
     }
   }
