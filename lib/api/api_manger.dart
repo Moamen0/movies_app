@@ -9,9 +9,7 @@ class ApiManager {
   static Future<MoviesResponse> getMovies() async {
     try {
       Uri url = Uri.https(Endpoint.serverName, Endpoint.ApiName,
-        {
-          "sort_by":'date_added'
-        }
+        {"sort_by": 'date_uploaded'}
       );
       var response = await http.get(url);
       return MoviesResponse.fromJson(jsonDecode(response.body));

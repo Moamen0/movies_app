@@ -7,7 +7,6 @@ import 'package:movies_app/utils/app_color.dart';
 import 'package:movies_app/utils/app_style.dart';
 
 import '../../../api/api_model/MoviesResponse.dart';
-import '../../../generated/l10n.dart';
 
 class Hometabitem extends StatefulWidget {
   List<Movies> movieList;
@@ -48,7 +47,7 @@ class _HometabitemState extends State<Hometabitem> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: height * 0.7,
               width: double.infinity,
               child: Stack(
@@ -79,7 +78,12 @@ class _HometabitemState extends State<Hometabitem> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(height: height*0.02,),
-                      Image.asset(AppAssets.availableNow),
+                      SizedBox(
+                          height: height * .1,
+                          child: Image.asset(
+                            AppAssets.availableNow,
+                            fit: BoxFit.fill,
+                          )),
                       CarouselSlider(
                         options: CarouselOptions(
                           height: height * 0.4,
@@ -96,7 +100,12 @@ class _HometabitemState extends State<Hometabitem> {
                           return MoviesItem(movie: movie);
                         }).toList(),
                       ),
-                      Image.asset(AppAssets.watchNow),
+                      SizedBox(
+                          height: height * .15,
+                          child: Image.asset(
+                            AppAssets.watchNow,
+                            fit: BoxFit.fill,
+                          )),
                     ],
                   ),
                 ],
@@ -148,12 +157,12 @@ class _HometabitemState extends State<Hometabitem> {
                                     horizontal: width*0.02,
                                     vertical: height*0.01
                                 ),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: width*0.005,
-                                    vertical: height*0.003
-                                ),
-                                width: width*0.13,
-                                height: height*0.03 ,
+                                // padding: EdgeInsets.symmetric(
+                                //     horizontal: width*0.005,
+                                //     vertical: height*0.003
+                                // ),
+                                width: width * 0.15,
+                                height: height * 0.05,
                                 decoration: BoxDecoration(
                                     color: AppColor.blackTransparentColor,
                                     borderRadius: BorderRadius.circular(10)
@@ -230,8 +239,8 @@ class _HometabitemState extends State<Hometabitem> {
                                     horizontal: width*0.005,
                                     vertical: height*0.003
                                 ),
-                                width: width*0.13,
-                                height: height*0.03 ,
+                                width: width * 0.15,
+                                height: height * 0.05,
                                 decoration: BoxDecoration(
                                     color: AppColor.blackTransparentColor,
                                     borderRadius: BorderRadius.circular(10)

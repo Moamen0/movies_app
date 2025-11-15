@@ -104,7 +104,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             // Show success message
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(res.message ?? "تم التسجيل بنجاح"),
+                content: Text(res.message ?? "account register complete!"),
                 backgroundColor: Colors.green,
                 duration: const Duration(seconds: 2),
               ),
@@ -116,7 +116,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(res.message ?? "تم التسجيل بنجاح"),
+              content: Text(res.message ??
+                  "account register complete! you need to login now!"),
               backgroundColor: Colors.green,
               duration: const Duration(seconds: 3),
             ),
@@ -126,7 +127,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Navigator.of(context).pop();
         }
       } else {
-        _showErrorSnackBar(res.message ?? "حدث خطأ في التسجيل");
+        _showErrorSnackBar(res.message ??
+            "error while register this account please try again later");
       }
     } catch (e) {
       if (!mounted) return;
@@ -135,7 +137,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         isLoading = false;
       });
 
-      _showErrorSnackBar("حدث خطأ: ${e.toString()}");
+      _showErrorSnackBar(e.toString());
     }
   }
 
@@ -227,10 +229,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: S.of(context).name,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return "يرجى إدخال الاسم";
+                      return "please enter your name";
                     }
                     if (value.trim().length < 3) {
-                      return "الاسم يجب أن يكون 3 أحرف على الأقل";
+                      return "the name must have at least 3 chars or more";
                     }
                     return null;
                   },
@@ -244,11 +246,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: S.of(context).email,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return "يرجى إدخال البريد الإلكتروني";
+                      return "please enter a valid emailAddress";
                     }
                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                         .hasMatch(value)) {
-                      return "البريد الإلكتروني غير صحيح";
+                      return "incorrect emailAddress";
                     }
                     return null;
                   },
@@ -263,15 +265,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: S.of(context).password,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "يرجى إدخال كلمة المرور";
+                      return "please enter password";
                     }
                     if (value.length < 8) {
-                      return "كلمة المرور يجب أن تكون 8 أحرف على الأقل";
+                      return "password must have 6 chars or more";
                     }
                     // Check for strong password (uppercase, lowercase, number)
                     final strongPasswordRegex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$');
                     if (!strongPasswordRegex.hasMatch(value)) {
-                      return "يجب أن تحتوي على حرف كبير وصغير ورقم";
+                      return "The password must contain at least one lowercase letter, one uppercase letter, and one special character such as @ ";
                     }
                     return null;
                   },
@@ -294,10 +296,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: S.of(context).confirmPassword,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "يرجى تأكيد كلمة المرور";
+                      return "retype password";
                     }
                     if (value != passwordController.text) {
-                      return "كلمة المرور غير مطابقة";
+                      return "repassword isn't match with password";
                     }
                     return null;
                   },
@@ -312,19 +314,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 SizedBox(height: height * .024),
                 
-                // PHONE FIELD - UPDATED WITH EGYPTIAN FORMAT VALIDATION
                 CustomTextFormField(
                   controller: phoneController,
                   prefixIcon: Image.asset(AppAssets.phoneIcon),
                   hint: S.of(context).phoneNumber,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return "يرجى إدخال رقم الهاتف";
+                      return "please enter a phone number";
                     }
-                    // Egyptian phone number format validation
                     final phoneRegex = RegExp(r'^(010|011|012|015)\d{8}$');
                     if (!phoneRegex.hasMatch(value.trim())) {
-                      return "رقم غير صحيح (مثال: 01012345678)";
+                      return "incorrect phone number (ex: 01111111111";
                     }
                     return null;
                   },
@@ -340,13 +340,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         _register();
                       }
                     },
-                    text: isLoading
-                        ? "جاري التسجيل..."
-                        : S.of(context).Create_Account,
+                    text: isLoading ? "loading..." : S.of(context).Create_Account,
                   ),
                 ),
                 SizedBox(height: height * 0.01),
-                
+
                 // ALREADY HAVE ACCOUNT
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

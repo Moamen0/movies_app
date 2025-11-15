@@ -20,8 +20,10 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController =
+      TextEditingController(text: 'sakata@gmail.com');
+  TextEditingController passwordController =
+      TextEditingController(text: 'Sakata@525');
   bool isCensored = true;
   bool isLoading = false;
 
@@ -53,7 +55,6 @@ class _LoginScreenState extends State<LoginScreen> {
         isLoading = false;
       });
 
-      // ✅ نجاح تسجيل الدخول
       if (res.success && res.data != null) {
         final token = res.data!.token;
 
@@ -61,10 +62,9 @@ class _LoginScreenState extends State<LoginScreen> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.remove('user_data');
           await AuthMangerApi.saveToken(token);
-          // ✅ عرض رسالة نجاح
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(res.message ?? "تم تسجيل الدخول بنجاح"),
+              content: Text(res.message ?? "login succes!"),
               backgroundColor: Colors.green,
               duration: Duration(seconds: 2),
             ),
@@ -75,11 +75,11 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       }
 
-      _showErrorSnackBar(res.message ?? "بيانات الدخول غير صحيحة");
+      _showErrorSnackBar(res.message ?? "incorrect emailAdress of password");
 
       if (res.message != null &&
-          (res.message!.contains("غير مسجل") ||
-              res.message!.contains("إنشاء حساب"))) {
+          (res.message!.contains("no account found with this data") ||
+              res.message!.contains("create account"))) {
         Future.delayed(const Duration(milliseconds: 500), () {
           if (mounted) {}
         });
@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
         isLoading = false;
       });
 
-      _showErrorSnackBar("حدث خطأ: ${e.toString()}");
+      _showErrorSnackBar(e.toString());
     }
   }
 
@@ -128,11 +128,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   hint: S.of(context).email,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return "يرجى إدخال البريد الإلكتروني";
+                      return "please enter your email adress";
                     }
                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                         .hasMatch(value)) {
-                      return "البريد الإلكتروني غير صحيح";
+                      return "incorrect email adress";
                     }
                     return null;
                   },
@@ -145,10 +145,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   hint: S.of(context).password,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "يرجى إدخال كلمة المرور";
+                      return "please enter your password";
                     }
                     if (value.length < 6) {
-                      return "كلمة المرور يجب أن تكون 6 أحرف على الأقل";
+                      return "password should be at least 6 chars or more";
                     }
                     return null;
                   },
@@ -184,10 +184,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: CustomElevatedButton(
-                    onPressed: _handleLogin, // ✅ Disable button when loading
-                    text: isLoading
-                        ? "جاري تسجيل الدخول..."
-                        : S.of(context).login,
+                    onPressed: _handleLogin,
+                    text: isLoading ? "loading" : S.of(context).login,
                   ),
                 ),
                 SizedBox(height: height * .024),
