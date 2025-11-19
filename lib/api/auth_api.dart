@@ -56,51 +56,54 @@ class AuthMangerApi {
       );
     }
   }
+
   static Future<UserModel?> getUserData() async {
-  try {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? userData = prefs.getString('user_data');
-    
-    if (userData != null) {
-      return UserModel.fromJson(jsonDecode(userData));
-    }
-    return null;
-  } catch (e) {
-    print("Get User Data Error: $e");
-    return null;
-  }
-}
-static Future<void> saveUserData(UserModel user) async {
-  try {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('user_data', jsonEncode(user.toJson()));
-  } catch (e) {
-    print("Save User Data Error: $e");
-  }
-}
-static Future<void> _fetchAndSaveUserProfile(String token) async {
-  try {
-    final response = await http.get(
-      Uri.parse("$baseUrl/profile"),
-      headers: {"Authorization": "Bearer $token"},
-    );
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? userData = prefs.getString('user_data');
 
-    print("Fetch User Profile Status: ${response.statusCode}");
-    print("Fetch User Profile Response: ${response.body}");
-
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body);
-
-      if (json["status"] == true && json["user"] != null) {
-        final user = UserModel.fromJson(json["user"]);
-        await saveUserData(user);
-        print("User data saved successfully");
+      if (userData != null) {
+        return UserModel.fromJson(jsonDecode(userData));
       }
+      return null;
+    } catch (e) {
+      print("Get User Data Error: $e");
+      return null;
     }
-  } catch (e) {
-    print("Error fetching user profile: $e");
   }
-}
+
+  static Future<void> saveUserData(UserModel user) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user_data', jsonEncode(user.toJson()));
+    } catch (e) {
+      print("Save User Data Error: $e");
+    }
+  }
+
+  static Future<void> _fetchAndSaveUserProfile(String token) async {
+    try {
+      final response = await http.get(
+        Uri.parse("$baseUrl/profile"),
+        headers: {"Authorization": "Bearer $token"},
+      );
+
+      print("Fetch User Profile Status: ${response.statusCode}");
+      print("Fetch User Profile Response: ${response.body}");
+
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body);
+
+        if (json["status"] == true && json["user"] != null) {
+          final user = UserModel.fromJson(json["user"]);
+          await saveUserData(user);
+          print("User data saved successfully");
+        }
+      }
+    } catch (e) {
+      print("Error fetching user profile: $e");
+    }
+  }
 
   // ===================== REGISTER =====================
   static Future<ApiResponse<AuthResponse>> register({
@@ -383,51 +386,51 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
   }
 
   static Future<ApiResponse<void>> resetPassword({
-  required String oldPassword,
-  required String newPassword,
-}) async {
-  try {
-    final token = await getToken();
-    if (token == null || token.isEmpty) {
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    try {
+      final token = await getToken();
+      if (token == null || token.isEmpty) {
         return ApiResponse(success: false, message: "please login first");
       }
 
-    final response = await http.patch(
-      Uri.parse('$baseUrl/auth/reset-password'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode({
-        "oldPassword": oldPassword,
-        "newPassword": newPassword,
-      }),
-    );
+      final response = await http.patch(
+        Uri.parse('$baseUrl/auth/reset-password'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          "oldPassword": oldPassword,
+          "newPassword": newPassword,
+        }),
+      );
 
-    print("Reset Password Status: ${response.statusCode}");
-    print("Reset Password Response: ${response.body}");
+      print("Reset Password Status: ${response.statusCode}");
+      print("Reset Password Response: ${response.body}");
 
-    if (response.statusCode == 201) {
-      final json = jsonDecode(response.body);
-      return ApiResponse(
-        success: true,
+      if (response.statusCode == 201) {
+        final json = jsonDecode(response.body);
+        return ApiResponse(
+          success: true,
           message: json["message"] ?? "password Changed successfully",
         );
-    } else {
-      final json = jsonDecode(response.body);
-      return ApiResponse(
-        success: false,
+      } else {
+        final json = jsonDecode(response.body);
+        return ApiResponse(
+          success: false,
           message: json["message"] ?? "couldn't update password",
         );
+      }
+    } catch (e) {
+      print("Reset Password Error: $e");
+      return ApiResponse(
+        success: false,
+        message: "حدث خطأ: ${e.toString()}",
+      );
     }
-  } catch (e) {
-    print("Reset Password Error: $e");
-    return ApiResponse(
-      success: false,
-      message: "حدث خطأ: ${e.toString()}",
-    );
   }
-}
 
   // ===================== GET PROFILE =====================
   static Future<ApiResponse<UserModel>> getProfile() async {
@@ -468,68 +471,68 @@ static Future<void> _fetchAndSaveUserProfile(String token) async {
 
   // ===================== UPDATE PROFILE =====================
   static Future<ApiResponse<void>> updateProfile({
-  String? name,
-  String? email,
-  String? phone,
-  String? avatar,
-}) async {
-  try {
-    String? token = await getToken();
+    String? name,
+    String? email,
+    String? phone,
+    String? avatar,
+  }) async {
+    try {
+      String? token = await getToken();
 
-    if (token == null || token.isEmpty) {
-      return ApiResponse(
-        success: false,
+      if (token == null || token.isEmpty) {
+        return ApiResponse(
+          success: false,
           message: "please Login first!",
         );
-    }
+      }
 
-    Map<String, dynamic> body = {};
-    if (email != null) body["email"] = email;
-    if (name != null) body["name"] = name;
-    if (phone != null) body["phone"] = phone;
+      Map<String, dynamic> body = {};
+      if (email != null) body["email"] = email;
+      if (name != null) body["name"] = name;
+      if (phone != null) body["phone"] = phone;
 
-    if (avatar != null) {
-      int? id = int.tryParse(avatar);
-      if (id != null) body["avaterId"] = id;
-    }
+      if (avatar != null) {
+        int? id = int.tryParse(avatar);
+        if (id != null) body["avaterId"] = id;
+      }
 
-    final response = await http.patch(
-      Uri.parse("$baseUrl/profile"),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      },
-      body: jsonEncode(body),
-    );
+      final response = await http.patch(
+        Uri.parse("$baseUrl/profile"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: jsonEncode(body),
+      );
 
-    print("Update Profile Status: ${response.statusCode}");
-    print("Update Profile Response: ${response.body}");
+      print("Update Profile Status: ${response.statusCode}");
+      print("Update Profile Response: ${response.body}");
 
-    // ✔ API doesn’t return body, فقط status
-    if (response.statusCode == 200) {
-      return ApiResponse(
-        success: true,
+      // ✔ API doesn’t return body, فقط status
+      if (response.statusCode == 200) {
+        return ApiResponse(
+          success: true,
           message: "profile updated successfully",
         );
-    } else if (response.statusCode == 401) {
-      await logout();
-      return ApiResponse(
-        success: false,
+      } else if (response.statusCode == 401) {
+        await logout();
+        return ApiResponse(
+          success: false,
           message: "session ended",
         );
-    } else {
-      return ApiResponse(
-        success: false,
+      } else {
+        return ApiResponse(
+          success: false,
           message: "failed update profile",
         );
-    }
-  } catch (e) {
-    return ApiResponse(
-      success: false,
+      }
+    } catch (e) {
+      return ApiResponse(
+        success: false,
         message: e.toString(),
       );
+    }
   }
-}
 
   // ===================== DELETE PROFILE =====================
   static Future<ApiResponse<void>> deleteProfile() async {
