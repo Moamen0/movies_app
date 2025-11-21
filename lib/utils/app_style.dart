@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'app_color.dart';
 
@@ -88,4 +89,31 @@ class AppStyle {
     fontSize: 20,
     fontWeight: FontWeight.w700,
   );
+  static TextStyle roboto24BoldWhite = GoogleFonts.roboto(
+    color: AppColor.whiteColor,
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+  );
+  static TextStyle roboto20BoldWhite = GoogleFonts.roboto(
+    color: AppColor.whiteColor,
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+  );
+  static TextStyle roboto20BoldGray = GoogleFonts.roboto(
+    color: AppColor.lightGray,
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+  );
+
+ static TextStyle roboto16RegularWhite = GoogleFonts.roboto(
+    color: AppColor.whiteColor,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+  );
+ static TextStyle roboto20RegularWhite = GoogleFonts.roboto(
+    color: AppColor.whiteColor,
+    fontSize: 20,
+    fontWeight: FontWeight.w400,
+  );
+
 }
