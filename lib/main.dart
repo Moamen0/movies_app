@@ -4,6 +4,7 @@ import 'package:movies_app/generated/l10n.dart';
 import 'package:movies_app/onBorading/onBoradingItem.dart';
 import 'package:movies_app/onBorading/onBoradingScrean.dart';
 import 'package:movies_app/ui/home/home_screen.dart';
+import 'package:movies_app/ui/movie_details/movies_details_screen.dart';
 import 'package:movies_app/ui/profile_tab/reset_password/reset_password.dart';
 import 'package:movies_app/ui/profile_tab/update_profile/update_profile.dart';
 import 'package:movies_app/utils/app_route.dart';
@@ -44,6 +45,7 @@ class MoviesApp extends StatelessWidget {
         AppRoute.resetPassword: (context) => ResetPassword(),
         AppRoute.forgetPassword: (context) => ForgetPassword(),
         AppRoute.homeScreen: (context) => HomeScreen(),
+        AppRoute.movieDetailsScreen: (context) => MovieDetailsScreen(),
       },
       theme: AppTheme.theme,
     );
