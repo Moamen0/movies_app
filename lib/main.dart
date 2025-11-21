@@ -45,7 +45,9 @@ class MoviesApp extends StatelessWidget {
         AppRoute.resetPassword: (context) => ResetPassword(),
         AppRoute.forgetPassword: (context) => ForgetPassword(),
         AppRoute.homeScreen: (context) => HomeScreen(),
-        AppRoute.movieDetailsScreen: (context) => MovieDetailsScreen(),
+        AppRoute.movieDetailsScreen: (context) => MovieDetailsScreen(
+              movieId: ModalRoute.of(context)!.settings.arguments as int,
+            ),
       },
       theme: AppTheme.theme,
     );
