@@ -4,16 +4,13 @@ import 'package:movies_app/api/api_manger.dart';
 import 'package:movies_app/ui/home_tab/movies_item/movies_item.dart';
 import 'package:movies_app/utils/app_assets.dart';
 import 'package:movies_app/utils/app_color.dart';
+import 'package:movies_app/utils/app_route.dart';
 import 'package:movies_app/utils/app_style.dart';
 
 import '../../../api/api_model/MoviesResponse.dart';
 
 class Hometabitem extends StatefulWidget {
   List<Movies> movieList;
-
-
-
-
 
   Hometabitem({required this.movieList, super.key});
 
@@ -39,11 +36,12 @@ class _HometabitemState extends State<Hometabitem> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     if (isLoading) {
-      return Center(child: CircularProgressIndicator(
+      return Center(
+          child: CircularProgressIndicator(
         color: AppColor.yellow,
       ));
     }
-    return  Scaffold(
+    return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -53,9 +51,11 @@ class _HometabitemState extends State<Hometabitem> {
               child: Stack(
                 children: [
                   Positioned.fill(
-                    child: Image.network(
-                      widget.movieList[currentIndex].largeCoverImage!,
-                      fit: BoxFit.cover,
+                    child: GestureDetector(
+                      child: Image.network(
+                        widget.movieList[currentIndex].largeCoverImage!,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   Positioned.fill(
@@ -77,7 +77,9 @@ class _HometabitemState extends State<Hometabitem> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(height: height*0.02,),
+                      SizedBox(
+                        height: height * 0.02,
+                      ),
                       SizedBox(
                           height: height * .1,
                           child: Image.asset(
@@ -113,74 +115,98 @@ class _HometabitemState extends State<Hometabitem> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: width*0.02,
-                  vertical: height*0.02
-              ),
+                  horizontal: width * 0.02, vertical: height * 0.02),
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Action',style: AppStyle.reglur20white,),
+                      Text(
+                        'Action',
+                        style: AppStyle.reglur20white,
+                      ),
                       InkWell(
-                        onTap: (){
-
-                        },
+                        onTap: () {},
                         child: Row(
                           children: [
-                            Text('See More',style: AppStyle.reglur16yellow,),
-                            SizedBox(width: width*0.01,),
-                            Icon(Icons.arrow_forward,color: AppColor.yellow,size: 20,)
+                            Text(
+                              'See More',
+                              style: AppStyle.reglur16yellow,
+                            ),
+                            SizedBox(
+                              width: width * 0.01,
+                            ),
+                            Icon(
+                              Icons.arrow_forward,
+                              color: AppColor.yellow,
+                              size: 20,
+                            )
                           ],
                         ),
                       )
                     ],
                   ),
-                  SizedBox(height: height*0.02,),
                   SizedBox(
-                    height: height*0.25,
+                    height: height * 0.02,
+                  ),
+                  SizedBox(
+                    height: height * 0.25,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
-                        return Container(
-                          width: width*0.5,
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(image: NetworkImage(actionMoviesList[index].largeCoverImage!),fit: BoxFit.cover),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: width*0.02,
-                                    vertical: height*0.01
-                                ),
-                                // padding: EdgeInsets.symmetric(
-                                //     horizontal: width*0.005,
-                                //     vertical: height*0.003
-                                // ),
-                                width: width * 0.15,
-                                height: height * 0.05,
-                                decoration: BoxDecoration(
-                                    color: AppColor.blackTransparentColor,
-                                    borderRadius: BorderRadius.circular(10)
-                                ),
-                                child: Row(
-                                  children: [
-                                    Text('${actionMoviesList[index].rating}',style: AppStyle.bold16White,),
-                                    Icon(Icons.star,color: AppColor.yellow,)
-                                  ],
-                                ),
-                              )
-                            ],
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, AppRoute.movieDetailsScreen,
+                                arguments: actionMoviesList[index].id);
+                          },
+                          child: Container(
+                            width: width * 0.5,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                      actionMoviesList[index].largeCoverImage!),
+                                  fit: BoxFit.cover),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: width * 0.02,
+                                      vertical: height * 0.01),
+                                  // padding: EdgeInsets.symmetric(
+                                  //     horizontal: width*0.005,
+                                  //     vertical: height*0.003
+                                  // ),
+                                  width: width * 0.15,
+                                  height: height * 0.05,
+                                  decoration: BoxDecoration(
+                                      color: AppColor.blackTransparentColor,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        '${actionMoviesList[index].rating}',
+                                        style: AppStyle.bold16White,
+                                      ),
+                                      Icon(
+                                        Icons.star,
+                                        color: AppColor.yellow,
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         );
                       },
                       separatorBuilder: (context, index) {
                         return SizedBox(
-                          width: width*0.05,
+                          width: width * 0.05,
                         );
                       },
                       itemCount: actionMoviesList.length,
@@ -191,74 +217,97 @@ class _HometabitemState extends State<Hometabitem> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: width*0.02,
-                  vertical: height*0.02
-              ),
+                  horizontal: width * 0.02, vertical: height * 0.02),
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Drama',style: AppStyle.reglur20white,),
+                      Text(
+                        'Drama',
+                        style: AppStyle.reglur20white,
+                      ),
                       InkWell(
-                        onTap: (){
-
-                        },
+                        onTap: () {},
                         child: Row(
                           children: [
-                            Text('See More',style: AppStyle.reglur16yellow,),
-                            SizedBox(width: width*0.01,),
-                            Icon(Icons.arrow_forward,color: AppColor.yellow,size: 20,)
+                            Text(
+                              'See More',
+                              style: AppStyle.reglur16yellow,
+                            ),
+                            SizedBox(
+                              width: width * 0.01,
+                            ),
+                            Icon(
+                              Icons.arrow_forward,
+                              color: AppColor.yellow,
+                              size: 20,
+                            )
                           ],
                         ),
                       )
                     ],
                   ),
-                  SizedBox(height: height*0.02,),
                   SizedBox(
-                    height: height*0.25,
+                    height: height * 0.02,
+                  ),
+                  SizedBox(
+                    height: height * 0.25,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
-                        return Container(
-                          width: width*0.5,
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(image: NetworkImage(dramaMoviesList[index].largeCoverImage!),fit: BoxFit.cover),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: width*0.02,
-                                    vertical: height*0.01
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: width*0.005,
-                                    vertical: height*0.003
-                                ),
-                                width: width * 0.15,
-                                height: height * 0.05,
-                                decoration: BoxDecoration(
-                                    color: AppColor.blackTransparentColor,
-                                    borderRadius: BorderRadius.circular(10)
-                                ),
-                                child: Row(
-                                  children: [
-                                    Text('${dramaMoviesList[index].rating}',style: AppStyle.bold16White,),
-                                    Icon(Icons.star,color: AppColor.yellow,)
-                                  ],
-                                ),
-                              )
-                            ],
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, AppRoute.movieDetailsScreen,
+                                arguments: dramaMoviesList[index].id);
+                          },
+                          child: Container(
+                            width: width * 0.5,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                      dramaMoviesList[index].largeCoverImage!),
+                                  fit: BoxFit.cover),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: width * 0.02,
+                                      vertical: height * 0.01),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: width * 0.005,
+                                      vertical: height * 0.003),
+                                  width: width * 0.15,
+                                  height: height * 0.05,
+                                  decoration: BoxDecoration(
+                                      color: AppColor.blackTransparentColor,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        '${dramaMoviesList[index].rating}',
+                                        style: AppStyle.bold16White,
+                                      ),
+                                      Icon(
+                                        Icons.star,
+                                        color: AppColor.yellow,
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         );
                       },
                       separatorBuilder: (context, index) {
                         return SizedBox(
-                          width: width*0.05,
+                          width: width * 0.05,
                         );
                       },
                       itemCount: dramaMoviesList.length,
@@ -271,8 +320,8 @@ class _HometabitemState extends State<Hometabitem> {
         ),
       ),
     );
-
   }
+
   void loadActionMovies() async {
     var response = await ApiManager.getMoviesByGenre("Action");
     setState(() {
@@ -280,6 +329,7 @@ class _HometabitemState extends State<Hometabitem> {
       isLoading = false;
     });
   }
+
   void loadDramaMovies() async {
     var response = await ApiManager.getMoviesByGenre("Drama");
     setState(() {
