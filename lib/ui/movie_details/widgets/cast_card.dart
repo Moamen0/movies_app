@@ -20,7 +20,7 @@ class CastCard extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: height * 0.015),
       padding: EdgeInsets.symmetric(
-          horizontal: width * 0.025, vertical: height * 0.015),
+          horizontal: width * 0.035, vertical: height * 0.015),
       decoration: BoxDecoration(
         color: const Color(0xFF2E2E2E),
         borderRadius: BorderRadius.circular(16),
@@ -37,18 +37,20 @@ class CastCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Name : $name", style: AppStyle.roboto20RegularWhite),
-              const SizedBox(height: 4),
-              Text(
-                "Character : $character",
-                style: AppStyle.roboto20RegularWhite,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Name : $name", style: AppStyle.roboto20RegularWhite),
+                const SizedBox(height: 4),
+                Text(
+                  "Character : $character",
+                  style: AppStyle.roboto20RegularWhite,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ],
+            ),
           )
         ],
       ),
