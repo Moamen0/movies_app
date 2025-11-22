@@ -192,15 +192,36 @@ class MovieDetailsContent extends StatelessWidget {
                   crossAxisSpacing: 12,
                   mainAxisSpacing: 5,
                   childAspectRatio: 2 / 3,
-                  children: const [
-                    SimilarItem(
-                        imagePath: 'assets/images/similar1.png', rating: '7.9'),
-                    SimilarItem(
-                        imagePath: 'assets/images/similar2.png', rating: '8.2'),
-                    SimilarItem(
-                        imagePath: 'assets/images/similar3.png', rating: '6.8'),
-                    SimilarItem(
-                        imagePath: 'assets/images/similar4.png', rating: '9.1'),
+                  children: [
+                    FutureBuilder(
+                      future: ApiManager.getMovieSuggestions(movie.id!),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return const Text("Error loading suggestions");
+                        } else {
+                          var suggestions = snapshot.data!;
+
+                          return SizedBox(
+                            height: 160,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: suggestions.length,
+                              itemBuilder: (context, index) {
+                                var movie = suggestions[index];
+                                return SimilarItem(
+                                  imagePath: movie.image,
+                                  rating: movie.rating.toString(),
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      },
+                    ),
                   ],
                 ),
                 const SizedBox(height: 10),
