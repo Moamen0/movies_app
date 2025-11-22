@@ -19,7 +19,7 @@ class SimilarItem extends StatelessWidget {
 
         ClipRRect(
           borderRadius: BorderRadius.circular(16),
-          child: Image.asset(
+          child: Image.network(
             imagePath,
             width: double.infinity,
             height: double.infinity,

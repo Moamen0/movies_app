@@ -15,9 +15,12 @@ class CastCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(10),
+      margin: EdgeInsets.only(bottom: height * 0.015),
+      padding: EdgeInsets.symmetric(
+          horizontal: width * 0.025, vertical: height * 0.015),
       decoration: BoxDecoration(
         color: const Color(0xFF2E2E2E),
         borderRadius: BorderRadius.circular(16),
@@ -26,7 +29,7 @@ class CastCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset(
+            child: Image.network(
               image,
               width: 55,
               height: 55,
@@ -34,18 +37,16 @@ class CastCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Name : $name",
-                style:AppStyle.roboto20RegularWhite
-              ),
+              Text("Name : $name", style: AppStyle.roboto20RegularWhite),
               const SizedBox(height: 4),
               Text(
                 "Character : $character",
-                style: AppStyle.roboto20RegularWhite
+                style: AppStyle.roboto20RegularWhite,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
             ],
           )
