@@ -19,6 +19,7 @@ class MovieDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black.withOpacity(0.4),
       body: FutureBuilder<MovieModel>(
         future: ApiManager.getMovieDetails(movieId),
         builder: (context, snapshot) {
@@ -64,6 +65,20 @@ class MovieDetailsContent extends StatelessWidget {
                     const Center(child: CircularProgressIndicator()),
                 errorWidget: (_, __, ___) => const Icon(Icons.error),
               ),
+              Container(
+                  height: height * 0.8,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.black.withOpacity(0.9), 
+                        Colors.black.withOpacity(0.4), 
+                        Colors.transparent, 
+                      ],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      stops: [0.0, 0.5, 1.0], 
+                    ),
+                  )),
               Positioned(
                 top: 40,
                 left: 16,
@@ -127,6 +142,20 @@ class MovieDetailsContent extends StatelessWidget {
                   ),
                 ),
               ),
+              Positioned(
+                  top: height * 0.7,
+                  left: 0,
+                  right: 0,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(movie.title ?? '',
+                            style: AppStyle.roboto24BoldWhite),
+                        SizedBox(height: height * 0.01),
+                        Text('${movie.year ?? ""}',
+                            style: AppStyle.roboto20BoldGray),
+                        SizedBox(height: height * 0.015),
+                      ]))
             ],
           ),
           Padding(
@@ -137,10 +166,6 @@ class MovieDetailsContent extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(movie.title ?? '', style: AppStyle.roboto24BoldWhite),
-                SizedBox(height: height * 0.01),
-                Text('${movie.year ?? ""}', style: AppStyle.roboto20BoldGray),
-                SizedBox(height: height * 0.015),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
