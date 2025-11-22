@@ -45,6 +45,8 @@ class MovieDetailsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var wedth = MediaQuery.of(context).size.width;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,50 +181,46 @@ class MovieDetailsContent extends StatelessWidget {
                 ScreenshotsColumn(images: movie.mediumScreenshots ?? []),
                 const SizedBox(height: 20),
 
-                // Similar movies
+                // Similar movies - GRID VIEW
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text('Similar', style: AppStyle.roboto24BoldWhite),
                 ),
-                const SizedBox(height: 5),
-                GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 5,
-                  childAspectRatio: 2 / 3,
-                  children: [
-                    FutureBuilder(
-                      future: ApiManager.getMovieSuggestions(movie.id!),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
-                          return const Text("Error loading suggestions");
-                        } else {
-                          var suggestions = snapshot.data!;
+                SizedBox(height: height * 0.04),
+                FutureBuilder(
+                  future: ApiManager.getMovieSuggestions(movie.id!),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return const Text("Error loading suggestions");
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Text("No similar movies found");
+                    } else {
+                      var suggestions = snapshot.data!;
 
-                          return SizedBox(
-                            height: 160,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: suggestions.length,
-                              itemBuilder: (context, index) {
-                                var movie = suggestions[index];
-                                return SimilarItem(
-                                  imagePath: movie.image,
-                                  rating: movie.rating.toString(),
-                                );
-                              },
-                            ),
+                      return GridView.builder(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: 0.7,
+                        ),
+                        itemCount: suggestions.length,
+                        itemBuilder: (context, index) {
+                          var movie = suggestions[index];
+                          return SimilarItem(
+                            imagePath: movie.image,
+                            rating: movie.rating.toString(),
                           );
-                        }
-                      },
-                    ),
-                  ],
+                        },
+                      );
+                    }
+                  },
                 ),
                 const SizedBox(height: 10),
 

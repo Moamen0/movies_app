@@ -26,7 +26,7 @@ class CastCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset(
+            child: Image.network(
               image,
               width: 55,
               height: 55,
