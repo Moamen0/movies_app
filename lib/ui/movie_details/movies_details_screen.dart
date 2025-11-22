@@ -45,6 +45,10 @@ class MovieDetailsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    final isTablet = width > 600;
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,7 +58,7 @@ class MovieDetailsContent extends StatelessWidget {
               CachedNetworkImage(
                 imageUrl: movie.largeCoverImage ?? "",
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.8,
+                height: height * 0.8,
                 fit: BoxFit.cover,
                 placeholder: (_, __) =>
                     const Center(child: CircularProgressIndicator()),
@@ -70,10 +74,12 @@ class MovieDetailsContent extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, AppRoute.homeScreen);
-                      },
-                      child: Icon(Icons.arrow_back_ios, color: Colors.white)),
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoute.homeScreen);
+                    },
+                    child:
+                        const Icon(Icons.arrow_back_ios, color: Colors.white),
+                  ),
                 ),
               ),
               Positioned(
@@ -89,7 +95,7 @@ class MovieDetailsContent extends StatelessWidget {
                 ),
               ),
               Positioned(
-                top: MediaQuery.of(context).size.height * 0.33,
+                top: height * 0.33,
                 left: 0,
                 right: 0,
                 child: Center(
@@ -124,14 +130,17 @@ class MovieDetailsContent extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 20),
+            padding: EdgeInsets.symmetric(
+              horizontal: width * 0.04,
+              vertical: height * 0.02,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(movie.title ?? '', style: AppStyle.roboto24BoldWhite),
-                const SizedBox(height: 8),
+                SizedBox(height: height * 0.01),
                 Text('${movie.year ?? ""}', style: AppStyle.roboto20BoldGray),
-                const SizedBox(height: 12),
+                SizedBox(height: height * 0.015),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -141,33 +150,53 @@ class MovieDetailsContent extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      padding: EdgeInsets.symmetric(vertical: height * 0.018),
                     ),
                     child: Text('Watch', style: AppStyle.roboto20BoldWhite),
                   ),
                 ),
-                const SizedBox(height: 14),
+                SizedBox(height: height * 0.018),
+
+                // Responsive StatBox Row with Expanded widgets
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    StatBox(
-                      icon: Icons.star,
-                      text: movie.rating?.toString() ?? "-",
-                      color: AppColor.yellow,
+                    Expanded(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: width * 0.005),
+                        child: StatBox(
+                          icon: Icons.star,
+                          text: movie.rating?.toString() ?? "-",
+                          color: AppColor.yellow,
+                        ),
+                      ),
                     ),
-                    StatBox(
-                      icon: Icons.favorite,
-                      text: movie.likeCount?.toString() ?? "0",
-                      color: Colors.red,
+                    Expanded(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: width * 0.005),
+                        child: StatBox(
+                          icon: Icons.favorite,
+                          text: movie.likeCount?.toString() ?? "0",
+                          color: Colors.red,
+                        ),
+                      ),
                     ),
-                    StatBox(
-                      icon: Icons.remove_red_eye,
-                      text: movie.mpaRating?.toString() ?? "0",
-                      color: Colors.blue,
+                    Expanded(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: width * 0.005),
+                        child: StatBox(
+                          icon: Icons.remove_red_eye,
+                          text: '${movie.runtime ?? 0}',
+                          color: Colors.blue,
+                        ),
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: height * 0.025),
 
                 // Screenshots
                 Align(
@@ -175,73 +204,70 @@ class MovieDetailsContent extends StatelessWidget {
                   child:
                       Text('Screen Shots', style: AppStyle.roboto24BoldWhite),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: height * 0.01),
                 ScreenshotsColumn(images: movie.mediumScreenshots ?? []),
-                const SizedBox(height: 20),
+                SizedBox(height: height * 0.025),
 
-                // Similar movies
+                // Similar movies - Responsive Grid
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text('Similar', style: AppStyle.roboto24BoldWhite),
                 ),
-                const SizedBox(height: 5),
-                GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 5,
-                  childAspectRatio: 2 / 3,
-                  children: [
-                    FutureBuilder(
-                      future: ApiManager.getMovieSuggestions(movie.id!),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
-                          return const Text("Error loading suggestions");
-                        } else {
-                          var suggestions = snapshot.data!;
+                SizedBox(height: height * 0.015),
+                FutureBuilder(
+                  future: ApiManager.getMovieSuggestions(movie.id!),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return const Text("Error loading suggestions");
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Text("No similar movies found");
+                    } else {
+                      var suggestions = snapshot.data!;
 
-                          return SizedBox(
-                            height: 160,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: suggestions.length,
-                              itemBuilder: (context, index) {
-                                var movie = suggestions[index];
-                                return SimilarItem(
-                                  imagePath: movie.image,
-                                  rating: movie.rating.toString(),
-                                );
-                              },
-                            ),
+                      return GridView.builder(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: isTablet ? 3 : 2,
+                          crossAxisSpacing: width * 0.03,
+                          mainAxisSpacing: height * 0.015,
+                          childAspectRatio: 0.7,
+                        ),
+                        itemCount: suggestions.length,
+                        itemBuilder: (context, index) {
+                          var movie = suggestions[index];
+                          return SimilarItem(
+                            imagePath: movie.image,
+                            rating: movie.rating.toString(),
                           );
-                        }
-                      },
-                    ),
-                  ],
+                        },
+                      );
+                    }
+                  },
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: height * 0.025),
 
                 // Summary
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text('Summary', style: AppStyle.roboto24BoldWhite),
                 ),
-                const SizedBox(height: 8),
-                Text(movie.descriptionFull ?? "",
-                    style: AppStyle.roboto16RegularWhite),
-                const SizedBox(height: 20),
+                SizedBox(height: height * 0.01),
+                Text(
+                  movie.descriptionFull ?? "",
+                  style: AppStyle.roboto16RegularWhite,
+                ),
+                SizedBox(height: height * 0.025),
 
                 // Cast
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text('Cast', style: AppStyle.roboto24BoldWhite),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: height * 0.01),
                 Column(
                   children: movie.cast?.map((actor) {
                         return CastCard(
@@ -252,15 +278,16 @@ class MovieDetailsContent extends StatelessWidget {
                       }).toList() ??
                       [],
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: height * 0.025),
 
                 // Genres
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text('Genres', style: AppStyle.roboto24BoldWhite),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: height * 0.012),
                 GenresList(genres: movie.genres ?? []),
+                SizedBox(height: height * 0.02),
               ],
             ),
           ),

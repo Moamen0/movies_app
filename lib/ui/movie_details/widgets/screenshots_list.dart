@@ -14,7 +14,7 @@ class ScreenshotsColumn extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 10),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(16),
-            child: Image.asset(
+            child: Image.network(
               img,
               height: 150,
               fit: BoxFit.cover,
