@@ -41,6 +41,7 @@ class ApiManager {
       rethrow;
     }
   }
+  
 
   static Future<List<MovieSuggestion>> getMovieSuggestions(int movieId) async {
     try {
@@ -62,4 +63,5 @@ class ApiManager {
       rethrow;
     }
   }
+  
 }
