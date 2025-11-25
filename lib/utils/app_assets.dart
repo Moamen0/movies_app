@@ -34,4 +34,5 @@ class AppAssets {
   static const String unSelectedIconSearch = "assets/images/unSelected_icon_search.png";
   static const String availableNow = "assets/images/Available Now.png";
   static const String watchNow = "assets/images/Watch Now.png";
+  static const String popcorn = "assets/images/pop.png";
 }

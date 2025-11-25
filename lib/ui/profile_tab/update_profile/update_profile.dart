@@ -41,53 +41,53 @@ class _UpdateProfileState extends State<UpdateProfile> {
   }
 
   // ✅ جلب بيانات اليوزر
- Future<void> _loadUserData() async {
-  setState(() => isLoading = true);
+  Future<void> _loadUserData() async {
+    setState(() => isLoading = true);
 
-  try {
-    print("🔹 Fetching profile from API...");
-    final response = await AuthMangerApi.getProfile();
+    try {
+      print("🔹 Fetching profile from API...");
+      final response = await AuthMangerApi.getProfile();
 
-    print("🔹 API Response: ${response.toString()}");
+      print("🔹 API Response: ${response.toString()}");
 
-    if (response.success && response.data != null) {
-      // تأكد أن data من نوع UserModel
-      if (response.data is UserModel) {
-        currentUser = response.data as UserModel;
-        print("✅ Profile loaded from API: $currentUser");
+      if (response.success && response.data != null) {
+        // تأكد أن data من نوع UserModel
+        if (response.data is UserModel) {
+          currentUser = response.data as UserModel;
+          print("✅ Profile loaded from API: $currentUser");
 
-        // حفظ البيانات محليًا
-        await AuthMangerApi.saveUserData(currentUser!);
+          // حفظ البيانات محليًا
+          await AuthMangerApi.saveUserData(currentUser!);
+        } else {
+          print(
+              "❌ API returned data but it's not UserModel: ${response.data.runtimeType}");
+        }
       } else {
-        print("❌ API returned data but it's not UserModel: ${response.data.runtimeType}");
+        print("⚠ API failed, loading local data...");
+        currentUser = await AuthMangerApi.getUserData();
+        if (currentUser != null) {
+          print("✅ Profile loaded from local storage: $currentUser");
+        }
       }
-    } else {
-      print("⚠ API failed, loading local data...");
-      currentUser = await AuthMangerApi.getUserData();
+
       if (currentUser != null) {
-        print("✅ Profile loaded from local storage: $currentUser");
+        userNameController.text = currentUser!.name ?? "";
+        phoneNumberController.text = currentUser!.phone ?? "";
+
+        if (currentUser!.avaterId != null) {
+          selectedAvatar = 'assets/images/avatar${currentUser!.avaterId}.png';
+        }
+
+        print("🔹 Updated UI controllers with user data");
+      } else {
+        print("❌ No user data available after all attempts.");
       }
+    } catch (e) {
+      print("Load User Data Error: $e");
+    } finally {
+      setState(() => isLoading = false);
     }
-
-    if (currentUser != null) {
-      userNameController.text = currentUser!.name ?? "";
-      phoneNumberController.text = currentUser!.phone ?? "";
-
-      if (currentUser!.avaterId != null) {
-        selectedAvatar = 'assets/images/avatar${currentUser!.avaterId}.png';
-      }
-
-      print("🔹 Updated UI controllers with user data");
-    } else {
-      print("❌ No user data available after all attempts.");
-    }
-  } catch (e) {
-    print("Load User Data Error: $e");
-  } finally {
-    setState(() => isLoading = false);
   }
-}
-
 
   // ✅ تحديث البيانات
   Future<void> _updateProfile() async {
@@ -259,20 +259,18 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 controller: userNameController,
                 prefixIcon: Icon(Icons.person),
                 iconColor: AppColor.whiteColor,
-                validator: (value) =>
-                    (value == null || value.trim().isEmpty)
-                        ? "يرجى إدخال الاسم"
-                        : null,
+                validator: (value) => (value == null || value.trim().isEmpty)
+                    ? "يرجى إدخال الاسم"
+                    : null,
               ),
               SizedBox(height: height * 0.025),
               CustomTextFormField(
                 controller: phoneNumberController,
                 prefixIcon: Icon(Icons.phone),
                 iconColor: AppColor.whiteColor,
-                validator: (value) =>
-                    (value == null || value.trim().isEmpty)
-                        ? "يرجى إدخال رقم الهاتف"
-                        : null,
+                validator: (value) => (value == null || value.trim().isEmpty)
+                    ? "يرجى إدخال رقم الهاتف"
+                    : null,
               ),
               SizedBox(height: height * 0.01),
               TextButton(
@@ -300,7 +298,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 child: CustomElevatedButton(
                   onPressed: _updateProfile,
                   text: isUpdating
-                      ? "جاري التحديث..."
+                      ? S.of(context).Update_Data
                       : S.of(context).Update_Data,
                 ),
               ),
