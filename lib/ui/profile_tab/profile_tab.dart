@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_app/api/auth_api.dart';
-import 'package:movies_app/model/Api_response.dart';
+import 'package:movies_app/bloc/profile/profile_bloc.dart';
+import 'package:movies_app/bloc/profile/profile_event.dart';
+import 'package:movies_app/bloc/profile/profile_state.dart';
+import 'package:movies_app/generated/l10n.dart';
 import 'package:movies_app/utils/app_assets.dart';
 import 'package:movies_app/utils/app_color.dart';
 import 'package:movies_app/utils/app_route.dart';
@@ -16,8 +20,6 @@ class ProfileTab extends StatefulWidget {
 class _ProfileTabState extends State<ProfileTab>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  bool isLoading = true;
-  UserModel? currentUser;
 
   List<Map<String, dynamic>> wishlistMovies = [];
   List<Map<String, dynamic>> historyMovies = [];
@@ -26,7 +28,14 @@ class _ProfileTabState extends State<ProfileTab>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this, initialIndex: 1);
-    _loadUserData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Load profile data when tab is initialized
+    // Using didChangeDependencies to ensure context is available
+    context.read<ProfileBloc>().add(LoadProfileEvent());
   }
 
   @override
@@ -35,66 +44,126 @@ class _ProfileTabState extends State<ProfileTab>
     super.dispose();
   }
 
-  Future<void> _loadUserData() async {
-    setState(() => isLoading = true);
-
-    try {
-      final response = await AuthMangerApi.getProfile();
-
-      if (response.success && response.data != null) {
-        currentUser = response.data as UserModel;
-        await AuthMangerApi.saveUserData(currentUser!);
-      } else {
-        currentUser = await AuthMangerApi.getUserData();
-      }
-    } catch (e) {
-      print("Load User Data Error: $e");
-      currentUser = await AuthMangerApi.getUserData();
-    } finally {
-      setState(() => isLoading = false);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    if (isLoading) {
-      return Scaffold(
-        backgroundColor: AppColor.blackColor,
-        body: Center(
-          child: CircularProgressIndicator(color: AppColor.yellow),
-        ),
-      );
-    }
-
     return Scaffold(
       backgroundColor: AppColor.blackColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Profile Header
-            _buildProfileHeader(height, width),
+      body: BlocBuilder<ProfileBloc, ProfileState>(
+        builder: (context, state) {
+          if (state is ProfileLoading) {
+            return Center(
+              child: CircularProgressIndicator(color: AppColor.yellow),
+            );
+          }
 
-            // Tab Bar
-            _buildTabBar(),
+          if (state is ProfileLoaded || 
+              state is ProfileUpdating || 
+              state is ProfileUpdateSuccess) {
+            final user = state is ProfileLoaded 
+                ? state.user 
+                : state is ProfileUpdating 
+                    ? state.currentUser 
+                    : (state as ProfileUpdateSuccess).user;
+            
+            final avatarPath = state is ProfileLoaded 
+                ? state.avatarPath 
+                : state is ProfileUpdating 
+                    ? state.currentAvatarPath 
+                    : (state as ProfileUpdateSuccess).avatarPath;
 
-            // Movies Grid
-            Expanded(
-              child: _buildMoviesGrid(),
-            ),
-          ],
-        ),
+            return SafeArea(
+              child: Column(
+                children: [
+                  _buildProfileHeader(height, width, user, avatarPath),
+                  _buildTabBar(),
+                  Expanded(child: _buildMoviesGrid()),
+                ],
+              ),
+            );
+          }
+
+          if (state is ProfileError) {
+            return Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: width * 0.1),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.account_circle_outlined,
+                      size: 100,
+                      color: AppColor.yellow.withOpacity(0.5),
+                    ),
+                    SizedBox(height: height * 0.03),
+                    Text(
+                      state.message,
+                      style: AppStyle.bold20White,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: height * 0.04),
+                    
+                    // Retry Button
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.yellow,
+                          foregroundColor: Colors.black,
+                          padding: EdgeInsets.symmetric(vertical: height * 0.02),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () {
+                          context.read<ProfileBloc>().add(LoadProfileEvent());
+                        },
+                        icon: Icon(Icons.refresh),
+                        label: Text(S.of(context).Retry, style: AppStyle.reglur16black),
+                      ),
+                    ),
+                    
+                    SizedBox(height: height * 0.02),
+                    
+                    // Login Button (if not authenticated)
+                    if (state.message.contains('login') || state.message.contains('Login'))
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColor.yellow,
+                            side: BorderSide(color: AppColor.yellow),
+                            padding: EdgeInsets.symmetric(vertical: height * 0.02),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pushReplacementNamed(
+                              AppRoute.loginScreen,
+                            );
+                          },
+                          icon: Icon(Icons.login),
+                          label: Text(S.of(context).login, style: AppStyle.reglur16yellow),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          return Center(
+            child: CircularProgressIndicator(color: AppColor.yellow),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildProfileHeader(double height, double width) {
-    String avatarPath = currentUser?.avaterId != null
-        ? 'assets/images/avatar${currentUser!.avaterId}.png'
-        : AppAssets.avatar1;
-
+  Widget _buildProfileHeader(double height, double width, dynamic user, String avatarPath) {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: width * 0.03,
@@ -102,7 +171,6 @@ class _ProfileTabState extends State<ProfileTab>
       ),
       child: Column(
         children: [
-          // Avatar
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -118,16 +186,14 @@ class _ProfileTabState extends State<ProfileTab>
                         errorBuilder: (context, error, stackTrace) {
                           return Container(
                             color: AppColor.grayColor,
-                            child: Icon(Icons.person,
-                                size: 40, color: Colors.white),
+                            child: Icon(Icons.person, size: 40, color: Colors.white),
                           );
                         },
                       ),
                     ),
                   ),
                   SizedBox(height: height * 0.015),
-                  Text(currentUser?.name ?? 'User Name',
-                      style: AppStyle.bold20White),
+                  Text(user?.name ?? 'User Name', style: AppStyle.bold20White),
                 ],
               ),
               Row(
@@ -135,30 +201,30 @@ class _ProfileTabState extends State<ProfileTab>
                 children: [
                   _buildStat(
                     count: wishlistMovies.length.toString(),
-                    label: 'Wish List',
+                    label: S.of(context).Wish_List,
                   ),
                   SizedBox(width: width * 0.1),
                   _buildStat(
                     count: historyMovies.length.toString(),
-                    label: 'History',
+                    label: S.of(context).History,
                   ),
                 ],
               ),
             ],
           ),
-
           SizedBox(height: height * 0.025),
-
-          // Action Buttons
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Edit Profile Button
               Expanded(
                 flex: 2,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, AppRoute.updateProfile);
+                  onPressed: () async {
+                    await Navigator.pushNamed(context, AppRoute.updateProfile);
+                    // Refresh profile after returning from update screen
+                    if (mounted) {
+                      context.read<ProfileBloc>().add(LoadProfileEvent());
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColor.yellow,
@@ -175,8 +241,6 @@ class _ProfileTabState extends State<ProfileTab>
                 ),
               ),
               SizedBox(width: width * 0.04),
-
-              // Exit Button
               Expanded(
                 child: ElevatedButton(
                   onPressed: () async {
@@ -236,23 +300,14 @@ class _ProfileTabState extends State<ProfileTab>
         unselectedLabelColor: Colors.grey,
         labelStyle: AppStyle.reglur20white,
         dividerColor: AppColor.transparent,
-        
         tabs: [
           Tab(
-            icon: Icon(
-              Icons.list,
-              size: 39,
-              color: AppColor.yellow,
-            ),
-            text: 'Watch List',
+            icon: Icon(Icons.list, size: 39, color: AppColor.yellow),
+            text: S.of(context).Watch_List,
           ),
           Tab(
-            icon: Icon(
-              Icons.folder,
-              size: 35,
-              color: AppColor.yellow,
-            ),
-            text: 'History',
+            icon: Icon(Icons.folder, size: 35, color: AppColor.yellow),
+            text: S.of(context).History,
           ),
         ],
       ),
@@ -300,7 +355,6 @@ class _ProfileTabState extends State<ProfileTab>
   Widget _buildMovieCard(Map<String, dynamic> movie) {
     return GestureDetector(
       onTap: () {
-        // Navigate to movie details
         Navigator.pushNamed(
           context,
           AppRoute.movieDetailsScreen,
@@ -314,7 +368,6 @@ class _ProfileTabState extends State<ProfileTab>
         ),
         child: Stack(
           children: [
-            // Movie Poster
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
@@ -335,8 +388,6 @@ class _ProfileTabState extends State<ProfileTab>
                 ),
               ),
             ),
-
-            // Rating Badge
             Positioned(
               top: 8,
               left: 8,
@@ -358,11 +409,7 @@ class _ProfileTabState extends State<ProfileTab>
                       ),
                     ),
                     SizedBox(width: 2),
-                    Icon(
-                      Icons.star,
-                      color: AppColor.yellow,
-                      size: 14,
-                    ),
+                    Icon(Icons.star, color: AppColor.yellow, size: 14),
                   ],
                 ),
               ),
