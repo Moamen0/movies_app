@@ -34,77 +34,109 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  Future<void> _handleLogin() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+
+Future<void> _handleLogin() async {
+  if (!_formKey.currentState!.validate()) {
+    return;
+  }
+
+  setState(() {
+    isLoading = true;
+  });
+
+  try {
+    print("🔐 Starting login...");
+    final res = await AuthMangerApi.login(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    );
+
+    if (!mounted) return;
 
     setState(() {
-      isLoading = true;
+      isLoading = false;
     });
 
-    try {
-      final res = await AuthMangerApi.login(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
+    print("🔐 Login response success: ${res.success}");
+    print("🔐 Login response message: ${res.message}");
 
-      if (!mounted) return;
+    if (res.success && res.data != null) {
+      final token = res.data!.token;
 
-      setState(() {
-        isLoading = false;
-      });
+      if (token != null && token.isNotEmpty) {
+        print("✅ Token received: ${token.substring(0, 20)}...");
+        
+        // Save token
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', token);
+        print("✅ Token saved to SharedPreferences");
 
-      if (res.success && res.data != null) {
-        final token = res.data!.token;
+        // Important: Fetch and save user profile data
+        try {
+          print("📡 Fetching user profile...");
+          final profileResponse = await AuthMangerApi.getProfile();
+          
+          if (profileResponse.success && profileResponse.data != null) {
+            // Save user data to local storage
+            await AuthMangerApi.saveUserData(profileResponse.data!);
+            print("✅ User profile saved:");
+            print("   - Name: ${profileResponse.data!.name}");
+            print("   - Email: ${profileResponse.data!.email}");
+            print("   - Phone: ${profileResponse.data!.phone}");
+            print("   - Avatar ID: ${profileResponse.data!.avaterId}");
+          } else {
+            print("⚠️ Could not fetch profile, but login successful");
+          }
+        } catch (e) {
+          print("⚠️ Error fetching profile: $e");
+          // Continue anyway since login was successful
+        }
 
-        if (token != null && token.isNotEmpty) {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.remove('user_data');
-          await AuthMangerApi.saveToken(token);
+        // Clear old user data cache
+        await prefs.remove('user_data');
+
+        // Show success message
+        if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(res.message ?? "login succes!"),
+              content: Text(res.message ?? "Login successful!"),
               backgroundColor: Colors.green,
               duration: Duration(seconds: 2),
             ),
           );
 
+          // Navigate to home
           Navigator.of(context).pushReplacementNamed(AppRoute.homeScreen);
-          return;
         }
+        return;
       }
-
-      _showErrorSnackBar(res.message ?? "incorrect emailAdress of password");
-
-      if (res.message != null &&
-          (res.message!.contains("no account found with this data") ||
-              res.message!.contains("create account"))) {
-        Future.delayed(const Duration(milliseconds: 500), () {
-          if (mounted) {}
-        });
-      }
-    } catch (e) {
-      if (!mounted) return;
-
-      setState(() {
-        isLoading = false;
-      });
-
-      _showErrorSnackBar(e.toString());
     }
-  }
 
-  void _showErrorSnackBar(String message) {
-    print(message);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-        duration: const Duration(seconds: 3),
-      ),
-    );
+    _showErrorSnackBar(res.message ?? "Incorrect email or password");
+
+  } catch (e) {
+    if (!mounted) return;
+
+    setState(() {
+      isLoading = false;
+    });
+
+    print("❌ Login error: $e");
+    _showErrorSnackBar(e.toString());
   }
+}
+
+void _showErrorSnackBar(String message) {
+  print("❌ Error: $message");
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.red,
+      duration: const Duration(seconds: 3),
+    ),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {

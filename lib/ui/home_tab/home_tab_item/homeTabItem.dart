@@ -55,6 +55,15 @@ class _HometabitemState extends State<Hometabitem> {
                       child: Image.network(
                         widget.movieList[currentIndex].largeCoverImage!,
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Colors.grey[900],
+                            child: Center(
+                              child: Icon(Icons.movie,
+                                  size: 100, color: Colors.grey[700]),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),

@@ -1,7 +1,12 @@
+// lib/screens/update_profile.dart
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_app/api/auth_api.dart';
+import 'package:movies_app/bloc/profile/profile_bloc.dart';
+import 'package:movies_app/bloc/profile/profile_event.dart';
+import 'package:movies_app/bloc/profile/profile_state.dart';
 import 'package:movies_app/generated/l10n.dart';
-import 'package:movies_app/model/Api_response.dart';
 import 'package:movies_app/utils/app_assets.dart';
 import 'package:movies_app/utils/app_color.dart';
 import 'package:movies_app/utils/app_route.dart';
@@ -23,14 +28,13 @@ class _UpdateProfileState extends State<UpdateProfile> {
   TextEditingController phoneNumberController = TextEditingController();
 
   String selectedAvatar = AppAssets.avatar1;
-  bool isLoading = true;
-  bool isUpdating = false;
-  UserModel? currentUser;
+  int? selectedAvaterId;
 
   @override
   void initState() {
     super.initState();
-    _loadUserData();
+    // Load profile data when screen is initialized
+    context.read<ProfileBloc>().add(LoadProfileEvent());
   }
 
   @override
@@ -40,191 +44,61 @@ class _UpdateProfileState extends State<UpdateProfile> {
     super.dispose();
   }
 
-  // ✅ جلب بيانات اليوزر
-  Future<void> _loadUserData() async {
-    setState(() => isLoading = true);
-
-    try {
-      print("🔹 Fetching profile from API...");
-      final response = await AuthMangerApi.getProfile();
-
-      print("🔹 API Response: ${response.toString()}");
-
-      if (response.success && response.data != null) {
-        // تأكد أن data من نوع UserModel
-        if (response.data is UserModel) {
-          currentUser = response.data as UserModel;
-          print("✅ Profile loaded from API: $currentUser");
-
-          // حفظ البيانات محليًا
-          await AuthMangerApi.saveUserData(currentUser!);
-        } else {
-          print(
-              "❌ API returned data but it's not UserModel: ${response.data.runtimeType}");
-        }
-      } else {
-        print("⚠ API failed, loading local data...");
-        currentUser = await AuthMangerApi.getUserData();
-        if (currentUser != null) {
-          print("✅ Profile loaded from local storage: $currentUser");
-        }
-      }
-
-      if (currentUser != null) {
-        userNameController.text = currentUser!.name ?? "";
-        phoneNumberController.text = currentUser!.phone ?? "";
-
-        if (currentUser!.avaterId != null) {
-          selectedAvatar = 'assets/images/avatar${currentUser!.avaterId}.png';
-        }
-
-        print("🔹 Updated UI controllers with user data");
-      } else {
-        print("❌ No user data available after all attempts.");
-      }
-    } catch (e) {
-      print("Load User Data Error: $e");
-    } finally {
-      setState(() => isLoading = false);
+  void _initializeControllers(dynamic user, String avatarPath) {
+    if (userNameController.text.isEmpty) {
+      userNameController.text = user?.name ?? "";
+      phoneNumberController.text = user?.phone ?? "";
+      selectedAvatar = avatarPath;
+      selectedAvaterId = user?.avaterId;
     }
   }
 
-  // ✅ تحديث البيانات
   Future<void> _updateProfile() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() => isUpdating = true);
-
-    try {
-      // استخراج رقم الـ Avatar
-      final avatarMatch = RegExp(r'avatar(\d+)').firstMatch(selectedAvatar);
-      final avaterIdString = avatarMatch?.group(1);
-      final avaterId =
-          avaterIdString != null ? int.parse(avaterIdString) : null;
-
-      final response = await AuthMangerApi.updateProfile(
-        name: userNameController.text.trim(),
-        phone: phoneNumberController.text.trim(),
-        avatar: avaterId?.toString(),
-      );
-
-      if (!mounted) return;
-
-      setState(() => isUpdating = false);
-
-      if (response.success && currentUser != null) {
-        // حفظ البيانات الجديدة محليًا
-        final updatedUser = currentUser!.copyWith(
-          name: userNameController.text.trim(),
-          phone: phoneNumberController.text.trim(),
-          avaterId: avaterId,
-        );
-
-        currentUser = updatedUser;
-        await AuthMangerApi.saveUserData(updatedUser);
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(response.message ?? "تم تحديث البيانات بنجاح"),
-            backgroundColor: Colors.green,
+    context.read<ProfileBloc>().add(
+          UpdateProfileEvent(
+            name: userNameController.text.trim(),
+            phone: phoneNumberController.text.trim(),
+            avatar: selectedAvaterId?.toString(),
           ),
         );
-      } else {
-        _showErrorSnackBar(response.message ?? "فشل تحديث البيانات");
-      }
-    } catch (e) {
-      if (!mounted) return;
-      setState(() => isUpdating = false);
-      _showErrorSnackBar("حدث خطأ: ${e.toString()}");
-    }
   }
 
-  // ✅ حذف الحساب
   Future<void> _deleteAccount() async {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: AppColor.grayColor,
-        title: Text("تأكيد الحذف", style: AppStyle.reglur16yellow),
+        title:
+            Text(S.of(context).Delete_Account, style: AppStyle.reglur16yellow),
         content: Text(
-          "هل أنت متأكد من حذف الحساب؟ هذا الإجراء لا يمكن التراجع عنه.",
+          "Are you sure you want to delete your account? This action cannot be undone.",
           style: AppStyle.reglur14white,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text("إلغاء", style: AppStyle.reglur14white),
+            child: Text(S.of(context).back, style: AppStyle.reglur14white),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text("حذف", style: AppStyle.reglur14yellow),
+            child: Text(S.of(context).Delete_Account,
+                style: AppStyle.reglur14yellow),
           ),
         ],
       ),
     );
 
-    if (confirm != true) return;
-
-    setState(() => isUpdating = true);
-
-    try {
-      final response = await AuthMangerApi.deleteProfile();
-
-      if (!mounted) return;
-      setState(() => isUpdating = false);
-
-      if (response.success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(response.message ?? "تم حذف الحساب"),
-            backgroundColor: Colors.green,
-          ),
-        );
-
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          AppRoute.loginScreen,
-          (route) => false,
-        );
-      } else {
-        _showErrorSnackBar(response.message ?? "فشل حذف الحساب");
-      }
-    } catch (e) {
-      if (!mounted) return;
-      setState(() => isUpdating = false);
-      _showErrorSnackBar("حدث خطأ: ${e.toString()}");
+    if (confirm == true) {
+      context.read<ProfileBloc>().add(DeleteProfileEvent());
     }
-  }
-
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-        duration: const Duration(seconds: 3),
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-
-    if (isLoading) {
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          centerTitle: true,
-          title: Text(
-            S.of(context).Pick_Avatar,
-            style: AppStyle.reglur16yellow,
-          ),
-        ),
-        body: Center(
-          child: CircularProgressIndicator(color: AppColor.yellow),
-        ),
-      );
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -235,81 +109,169 @@ class _UpdateProfileState extends State<UpdateProfile> {
           style: AppStyle.reglur16yellow,
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(
-            vertical: height * 0.03, horizontal: width * 0.04),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: GestureDetector(
-                  onTap: _showAvatarPicker,
-                  child: Image.asset(
-                    selectedAvatar,
-                    width: width * 0.38,
-                    height: height * 0.18,
-                    fit: BoxFit.contain,
-                  ),
+      body: BlocConsumer<ProfileBloc, ProfileState>(
+        listener: (context, state) {
+          if (state is ProfileUpdateSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 1),
+              ),
+            );
+            // Navigate back to profile tab after successful update
+            Future.delayed(const Duration(milliseconds: 1500), () {
+              if (mounted) {
+                Navigator.of(context).pop();
+              }
+            });
+          } else if (state is ProfileError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 3),
+              ),
+            );
+          } else if (state is ProfileDeleted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(S.of(context).Delete_Account),
+                backgroundColor: Colors.green,
+              ),
+            );
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              AppRoute.loginScreen,
+              (route) => false,
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is ProfileLoading) {
+            return Center(
+              child: CircularProgressIndicator(color: AppColor.yellow),
+            );
+          }
+
+          if (state is ProfileLoaded ||
+              state is ProfileUpdating ||
+              state is ProfileUpdateSuccess ||
+              state is ProfileError) {
+            final user = state is ProfileLoaded
+                ? state.user
+                : state is ProfileUpdating
+                    ? state.currentUser
+                    : state is ProfileUpdateSuccess
+                        ? state.user
+                        : (state as ProfileError).user;
+
+            final avatarPath = state is ProfileLoaded
+                ? state.avatarPath
+                : state is ProfileUpdating
+                    ? state.currentAvatarPath
+                    : state is ProfileUpdateSuccess
+                        ? state.avatarPath
+                        : (state as ProfileError).avatarPath ??
+                            AppAssets.avatar1;
+
+            final isUpdating = state is ProfileUpdating;
+
+            // Initialize controllers with user data
+            _initializeControllers(user, avatarPath);
+
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: height * 0.03,
+                horizontal: width * 0.04,
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: GestureDetector(
+                        onTap: isUpdating
+                            ? null
+                            : () => _showAvatarPicker(avatarPath),
+                        child: Image.asset(
+                          selectedAvatar,
+                          width: width * 0.38,
+                          height: height * 0.18,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: height * 0.04),
+                    CustomTextFormField(
+                      controller: userNameController,
+                      prefixIcon: Icon(Icons.person),
+                      iconColor: AppColor.whiteColor,
+                      enabled: !isUpdating,
+                      validator: (value) =>
+                          (value == null || value.trim().isEmpty)
+                              ? S.of(context).name
+                              : null,
+                    ),
+                    SizedBox(height: height * 0.025),
+                    CustomTextFormField(
+                      controller: phoneNumberController,
+                      prefixIcon: Icon(Icons.phone),
+                      iconColor: AppColor.whiteColor,
+                      enabled: !isUpdating,
+                      validator: (value) =>
+                          (value == null || value.trim().isEmpty)
+                              ? S.of(context).phoneNumber
+                              : null,
+                    ),
+                    SizedBox(height: height * 0.01),
+                    TextButton(
+                      onPressed: isUpdating
+                          ? null
+                          : () {
+                              Navigator.of(context)
+                                  .pushNamed(AppRoute.resetPassword);
+                            },
+                      child: Text(
+                        S.of(context).reset_password,
+                        style: AppStyle.reglur17white,
+                      ),
+                    ),
+                    Spacer(),
+                    SizedBox(
+                      width: double.infinity,
+                      child: CustomElevatedButton(
+                        backgroundColor: AppColor.red,
+                        onPressed: _deleteAccount,
+                        text: S.of(context).Delete_Account,
+                        textStyle: AppStyle.reglur20white,
+                      ),
+                    ),
+                    SizedBox(height: height * 0.02),
+                    SizedBox(
+                      width: double.infinity,
+                      child: CustomElevatedButton(
+                        onPressed: _updateProfile,
+                        text: isUpdating
+                            ? "Updating..."
+                            : S.of(context).Update_Data,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(height: height * 0.04),
-              CustomTextFormField(
-                controller: userNameController,
-                prefixIcon: Icon(Icons.person),
-                iconColor: AppColor.whiteColor,
-                validator: (value) => (value == null || value.trim().isEmpty)
-                    ? "يرجى إدخال الاسم"
-                    : null,
-              ),
-              SizedBox(height: height * 0.025),
-              CustomTextFormField(
-                controller: phoneNumberController,
-                prefixIcon: Icon(Icons.phone),
-                iconColor: AppColor.whiteColor,
-                validator: (value) => (value == null || value.trim().isEmpty)
-                    ? "يرجى إدخال رقم الهاتف"
-                    : null,
-              ),
-              SizedBox(height: height * 0.01),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(AppRoute.resetPassword);
-                },
-                child: Text(
-                  S.of(context).Reset_Password,
-                  style: AppStyle.reglur17white,
-                ),
-              ),
-              Spacer(),
-              SizedBox(
-                width: double.infinity,
-                child: CustomElevatedButton(
-                  backgroundColor: AppColor.red,
-                  onPressed: _deleteAccount,
-                  text: S.of(context).Delete_Account,
-                  textStyle: AppStyle.reglur20white,
-                ),
-              ),
-              SizedBox(height: height * 0.02),
-              SizedBox(
-                width: double.infinity,
-                child: CustomElevatedButton(
-                  onPressed: _updateProfile,
-                  text: isUpdating
-                      ? S.of(context).Update_Data
-                      : S.of(context).Update_Data,
-                ),
-              ),
-            ],
-          ),
-        ),
+            );
+          }
+
+          return Center(
+            child: CircularProgressIndicator(color: AppColor.yellow),
+          );
+        },
       ),
     );
   }
 
-  void _showAvatarPicker() {
+  void _showAvatarPicker(String currentAvatarPath) {
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColor.grayColor,
@@ -333,7 +295,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
         return Padding(
           padding: EdgeInsets.symmetric(
-              vertical: height * 0.020, horizontal: width * 0.05),
+            vertical: height * 0.020,
+            horizontal: width * 0.05,
+          ),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -353,7 +317,26 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
                     return GestureDetector(
                       onTap: () {
-                        setState(() => selectedAvatar = avatar);
+                        setState(() {
+                          selectedAvatar = avatar;
+                          // Extract avatar ID from path
+                          final avatarMatch =
+                              RegExp(r'avatar(\d+)').firstMatch(avatar);
+                          selectedAvaterId = avatarMatch != null
+                              ? int.parse(avatarMatch.group(1)!)
+                              : null;
+                        });
+
+                        // Update avatar in BLoC immediately for live preview
+                        if (selectedAvaterId != null) {
+                          context.read<ProfileBloc>().add(
+                                UpdateAvatarEvent(
+                                  avatarPath: avatar,
+                                  avaterId: selectedAvaterId!,
+                                ),
+                              );
+                        }
+
                         Navigator.pop(context);
                       },
                       child: Container(
@@ -361,7 +344,10 @@ class _UpdateProfileState extends State<UpdateProfile> {
                           color: isSelected
                               ? AppColor.yellow.withOpacity(0.5)
                               : Colors.transparent,
-                          border: Border.all(color: AppColor.yellow, width: 2),
+                          border: Border.all(
+                            color: AppColor.yellow,
+                            width: 2,
+                          ),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Padding(
