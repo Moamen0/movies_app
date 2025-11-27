@@ -85,4 +85,8 @@ class ApiManager {
       rethrow;
     }
   }
+  void searchInMovies(String text){
+
+
+  }
 }
