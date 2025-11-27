@@ -85,7 +85,21 @@ class ApiManager {
       rethrow;
     }
   }
-  void searchInMovies(String text){
+  static Future<MoviesResponse> getMoviesBy(String text) async{
+    try{
+      Uri url = Uri.https(
+        Endpoint.serverName,
+        Endpoint.movieSearchApi,
+        {
+          'query_term':text
+        }
+      );
+      var response = await http.get(url);
+      return MoviesResponse.fromJson(jsonDecode(response.body));
+    }catch(e){
+      rethrow;
+
+    }
 
 
   }

@@ -18,7 +18,6 @@ class SearchTab extends StatefulWidget {
 
 class _SearchTabState extends State<SearchTab> {
   TextEditingController controller =TextEditingController();
-  List<Movies> moviesList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +40,7 @@ class _SearchTabState extends State<SearchTab> {
         ),
       ),
       body: FutureBuilder(
-        future: ApiManager.getMovies(),
+        future: ApiManager.getMoviesBy(controller.text),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -58,7 +57,7 @@ class _SearchTabState extends State<SearchTab> {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      ApiManager.getMovies();
+                      ApiManager.getMoviesBy(controller.text);
                     },
                     child: Text('Try again'))
               ],
@@ -70,13 +69,18 @@ class _SearchTabState extends State<SearchTab> {
                 Text(snapshot.data!.statusMessage!),
                 ElevatedButton(
                     onPressed: () {
-                      ApiManager.getMovies();
+                      ApiManager.getMoviesBy(controller.text);
                     },
                     child: Text('Try again'))
               ],
             );
           }
           var moviesList = snapshot.data?.data?.movies ?? [];
+          if(moviesList.isEmpty){
+            return Center(
+              child: Text('No movies found',style: AppStyle.bold24White,),
+            );
+          }
           return Padding(
             padding: EdgeInsets.symmetric(
                 vertical: height*0.02
@@ -84,8 +88,8 @@ class _SearchTabState extends State<SearchTab> {
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: width*0.02,   // مسافة بين الأعمدة
-                mainAxisSpacing:height*0.02,    // مسافة بين الصفوف
+                crossAxisSpacing: width*0.02,
+                mainAxisSpacing:height*0.02,
               ),
               itemBuilder: (context, index) {
                 return MoviesItem(movie: moviesList[index]);
