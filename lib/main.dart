@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:movies_app/bloc/locale/localization.dart';
+import 'package:movies_app/bloc/movies/movies_bloc.dart';
 import 'package:movies_app/bloc/profile/profile_bloc.dart';
 import 'package:movies_app/generated/l10n.dart';
 import 'package:movies_app/onBorading/onBoradingItem.dart';
 import 'package:movies_app/onBorading/onBoradingScrean.dart';
+import 'package:movies_app/ui/browse_tab/borwse_tab.dart';
 import 'package:movies_app/ui/home/home_screen.dart';
 import 'package:movies_app/ui/movie_details/movies_details_screen.dart';
 import 'package:movies_app/ui/profile_tab/reset_password/reset_password.dart';
@@ -30,6 +32,7 @@ class MoviesApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => LocaleCubit()),
         BlocProvider(create: (context) => ProfileBloc()),
+        BlocProvider(create: (context) => MoviesBloc()),
       ],
       child: BlocBuilder<LocaleCubit, Locale>(
         builder: (context, locale) {
@@ -43,9 +46,9 @@ class MoviesApp extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: S.delegate.supportedLocales,
-            initialRoute: AppRoute.homeScreen,
+            initialRoute: AppRoute.onborading,
             routes: {
-              AppRoute.home_tab: (context) => const HomeTab(),
+              AppRoute.home_tab: (context) =>  HomeTab(),
               AppRoute.loginScreen: (context) => const LoginScreen(),
               AppRoute.onborading: (context) => const OnBoradingScrean(),
               AppRoute.OnBoradingItem: (context) => const OnBoradingItem(),
@@ -53,6 +56,7 @@ class MoviesApp extends StatelessWidget {
               AppRoute.updateProfile: (context) => const UpdateProfile(),
               AppRoute.resetPassword: (context) => const ResetPassword(),
               AppRoute.forgetPassword: (context) => const ForgetPassword(),
+              AppRoute.browse: (context) => const BrowseTab(),
               AppRoute.homeScreen: (context) =>   HomeScreen(),
               AppRoute.movieDetailsScreen: (context) => MovieDetailsScreen(
                     movieId: ModalRoute.of(context)!.settings.arguments as int,

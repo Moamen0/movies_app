@@ -11,7 +11,8 @@ class MovieModel {
   final int? runtime;
   final List<String>? genres;
 
-  final int? likeCount; // 👉 من JSON
+  // ✅ FIXED: Made nullable since API doesn't always provide it
+  final int? likeCount;
 
   final String? descriptionIntro;
   final String? descriptionFull;
@@ -76,7 +77,8 @@ class MovieModel {
       runtime: json['runtime'],
       genres: json['genres'] != null ? List<String>.from(json['genres']) : null,
 
-      likeCount: json['like_count'], // ❤️ من API نفسه
+      // ✅ FIXED: Use null-aware operator with fallback
+      likeCount: json['like_count'] ?? 0, // Default to 0 if not present
 
       descriptionIntro: json['description_intro'],
       descriptionFull: json['description_full'],
@@ -91,21 +93,21 @@ class MovieModel {
       mediumCoverImage: json['medium_cover_image'],
       largeCoverImage: json['large_cover_image'],
 
-      mediumScreenshots: List<String>.from([
+      // ✅ FIXED: Better null safety for screenshots
+      mediumScreenshots: _extractScreenshots([
         json['medium_screenshot_image1'],
         json['medium_screenshot_image2'],
         json['medium_screenshot_image3'],
-      ].where((e) => e is String && e.isNotEmpty)),
+      ]),
 
-      largeScreenshots: List<String>.from([
+      largeScreenshots: _extractScreenshots([
         json['large_screenshot_image1'],
         json['large_screenshot_image2'],
         json['large_screenshot_image3'],
-      ].where((e) => e is String && e.isNotEmpty)),
+      ]),
 
-      cast: json['cast'] != null
-          ? (json['cast'] as List).map((e) => ActorModel.fromJson(e)).toList()
-          : null,
+      // ✅ FIXED: Added try-catch for cast parsing
+      cast: _parseCast(json['cast']),
 
       torrents: json['torrents'] != null
           ? (json['torrents'] as List)
@@ -113,6 +115,35 @@ class MovieModel {
               .toList()
           : null,
     );
+  }
+
+  // ✅ NEW: Helper method to extract valid screenshots
+  static List<String>? _extractScreenshots(List<dynamic> images) {
+    try {
+      final validImages = images
+          .where((e) => e != null && e is String && e.isNotEmpty)
+          .cast<String>()
+          .toList();
+      return validImages.isEmpty ? null : validImages;
+    } catch (e) {
+      print('⚠️ Screenshot parsing error: $e');
+      return null;
+    }
+  }
+
+  // ✅ NEW: Helper method to safely parse cast
+  static List<ActorModel>? _parseCast(dynamic castData) {
+    try {
+      if (castData == null || castData is! List) {
+        return null;
+      }
+      return (castData as List)
+          .map((e) => ActorModel.fromJson(e))
+          .toList();
+    } catch (e) {
+      print('⚠️ Cast parsing error: $e');
+      return null;
+    }
   }
 }
 

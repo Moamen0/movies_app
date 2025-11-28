@@ -1,6 +1,12 @@
+// lib/ui/movie_details/movies_details_screen.dart
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_app/api/api_manger.dart';
+import 'package:movies_app/bloc/movies/movies_bloc.dart';
+import 'package:movies_app/bloc/movies/movies_event.dart';
+import 'package:movies_app/bloc/movies/movies_state.dart';
 import 'package:movies_app/model/Api_movie_deatils.dart';
 import 'package:movies_app/ui/movie_details/widgets/cast_card.dart';
 import 'package:movies_app/ui/movie_details/widgets/genres_list.dart';
@@ -10,29 +16,59 @@ import 'package:movies_app/ui/movie_details/widgets/stat_box.dart';
 import 'package:movies_app/utils/app_color.dart';
 import 'package:movies_app/utils/app_style.dart';
 
-class MovieDetailsScreen extends StatelessWidget {
+class MovieDetailsScreen extends StatefulWidget {
   final int movieId;
 
-  MovieDetailsScreen({super.key, required this.movieId});
+  const MovieDetailsScreen({super.key, required this.movieId});
+
+  @override
+  State<MovieDetailsScreen> createState() => _MovieDetailsScreenState();
+}
+
+class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _addToHistory();
+  }
+
+  void _addToHistory() {}
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.black.withOpacity(0.4),
-      body: FutureBuilder<MovieModel>(
-        future: ApiManager.getMovieDetails(movieId),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData) {
-            return const Center(child: Text('No data'));
-          } else {
-            final movie = snapshot.data!;
-            return MovieDetailsContent(movie: movie);
-          }
-        },
+      body: Padding(
+        padding: EdgeInsets.only(top: height * 0.02),
+        child: FutureBuilder<MovieModel>(
+          future: ApiManager.getMovieDetails(widget.movieId),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData) {
+              return const Center(child: Text('No data'));
+            } else {
+              final movie = snapshot.data!;
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                context.read<MoviesBloc>().add(
+                      AddToHistoryEvent(
+                        movieId: movie.id!,
+                        title: movie.title ?? 'Unknown',
+                        image: movie.mediumCoverImage,
+                        rating: movie.rating,
+                      ),
+                    );
+              });
+
+              return MovieDetailsContent(movie: movie);
+            }
+          },
+        ),
       ),
     );
   }
@@ -65,19 +101,21 @@ class MovieDetailsContent extends StatelessWidget {
                 errorWidget: (_, __, ___) => const Icon(Icons.error),
               ),
               Container(
-                  height: height * 0.8,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.black.withOpacity(0.9), 
-                        Colors.black.withOpacity(0.4), 
-                        Colors.transparent, 
-                      ],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      stops: [0.0, 0.5, 1.0], 
-                    ),
-                  )),
+                height: height * 0.8,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.black.withOpacity(0.9),
+                      Colors.black.withOpacity(0.4),
+                      Colors.transparent,
+                    ],
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    stops: [0.0, 0.5, 1.0],
+                  ),
+                ),
+              ),
+
               Positioned(
                 top: 40,
                 left: 16,
@@ -88,26 +126,65 @@ class MovieDetailsContent extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
+                    onTap: () => Navigator.pop(context),
                     child:
                         const Icon(Icons.arrow_back_ios, color: Colors.white),
                   ),
                 ),
               ),
+
+              // Bookmark Button
               Positioned(
                 top: 40,
                 right: 16,
-                child: Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: const BoxDecoration(
-                    color: Colors.transparent,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.bookmark_border, color: Colors.white),
+                child: BlocBuilder<MoviesBloc, MoviesState>(
+                  builder: (context, state) {
+                    final isInWatchlist = state.isInWatchlist(movie.id!);
+
+                    return GestureDetector(
+                      onTap: () {
+                        if (isInWatchlist) {
+                          // Remove from watchlist
+                          context.read<MoviesBloc>().add(
+                                RemoveFromWatchlistEvent(movie.id!),
+                              );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Removed from Watchlist'),
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 1),
+                            ),
+                          );
+                        } else {
+                          // Add to watchlist
+                          context.read<MoviesBloc>().add(
+                                AddToWatchlistEvent(
+                                  movieId: movie.id!,
+                                  title: movie.title ?? 'Unknown',
+                                  image: movie.mediumCoverImage,
+                                  rating: movie.rating,
+                                ),
+                              );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Added to Watchlist'),
+                              backgroundColor: Colors.green,
+                              duration: Duration(seconds: 1),
+                            ),
+                          );
+                        }
+                      },
+                      child: Icon(
+                        isInWatchlist ? Icons.bookmark : Icons.bookmark_border,
+                        color: isInWatchlist ? AppColor.yellow : Colors.white,
+                        size: 28,
+                      ),
+                    );
+                  },
                 ),
               ),
+
+              // Play Button
               Positioned(
                 top: height * 0.33,
                 left: 0,
@@ -141,20 +218,23 @@ class MovieDetailsContent extends StatelessWidget {
                   ),
                 ),
               ),
+
+              // Movie Title
               Positioned(
-                  top: height * 0.7,
-                  left: 0,
-                  right: 0,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(movie.title ?? '',
-                            style: AppStyle.roboto24BoldWhite),
-                        SizedBox(height: height * 0.01),
-                        Text('${movie.year ?? ""}',
-                            style: AppStyle.roboto20BoldGray),
-                        SizedBox(height: height * 0.015),
-                      ]))
+                top: height * 0.7,
+                left: 0,
+                right: 0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(movie.title ?? '', style: AppStyle.roboto24BoldWhite),
+                    SizedBox(height: height * 0.01),
+                    Text('${movie.year ?? ""}',
+                        style: AppStyle.roboto20BoldGray),
+                    SizedBox(height: height * 0.015),
+                  ],
+                ),
+              ),
             ],
           ),
           Padding(
@@ -181,7 +261,7 @@ class MovieDetailsContent extends StatelessWidget {
                 ),
                 SizedBox(height: height * 0.018),
 
-                // Responsive StatBox Row with Expanded widgets
+                // Stats Row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -232,7 +312,7 @@ class MovieDetailsContent extends StatelessWidget {
                 ScreenshotsColumn(images: movie.mediumScreenshots ?? []),
                 SizedBox(height: height * 0.025),
 
-                // Similar movies - Responsive Grid
+                // Similar movies
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text('Similar', style: AppStyle.roboto24BoldWhite),

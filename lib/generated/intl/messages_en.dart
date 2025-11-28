@@ -25,6 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Account_deleted_successfully": MessageLookupByLibrary.simpleMessage(
       "Account deleted successfully",
     ),
+    "Action": MessageLookupByLibrary.simpleMessage("Action"),
     "Avatar": MessageLookupByLibrary.simpleMessage("Avatar"),
     "Cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
     "Confirm_New_Password": MessageLookupByLibrary.simpleMessage(
@@ -47,6 +48,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Discover movies from every genre, in all available qualities. Find something new and exciting to watch every day.",
     ),
     "DontHaveAcc": MessageLookupByLibrary.simpleMessage("Don\'t Have Account?"),
+    "Drama": MessageLookupByLibrary.simpleMessage("Drama"),
     "Edit_Profile": MessageLookupByLibrary.simpleMessage("Edit Profile"),
     "Error_loading_data": MessageLookupByLibrary.simpleMessage(
       "Error loading data",
@@ -91,6 +93,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Save_movies_to_your_watchlist": MessageLookupByLibrary.simpleMessage(
       "Save movies to your watchlist to keep track of what you want to watch next. Enjoy films in various qualities and genres.",
     ),
+    "See_More": MessageLookupByLibrary.simpleMessage("See More"),
     "Shareyourthoughts": MessageLookupByLibrary.simpleMessage(
       "Share your thoughts on the movies you\'ve watched. Dive deep into film details and help others discover great movies with your reviews.",
     ),
