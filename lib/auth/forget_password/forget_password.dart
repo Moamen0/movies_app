@@ -19,12 +19,14 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   bool isPasswordObscured = true;
   bool isConfirmPasswordObscured = true;
   bool isLoading = false;
-  bool emailVerified = false; // للتحقق من البريد أولاً (في حال كان الـ API يدعم ذلك)
+  bool emailVerified =
+      false; // للتحقق من البريد أولاً (في حال كان الـ API يدعم ذلك)
 
   @override
   void dispose() {
@@ -56,7 +58,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
 
       if (res.success) {
         _showSuccessSnackBar(res.message ?? "تم تغيير كلمة المرور بنجاح");
-        
+
         // الانتظار ثانيتين ثم الرجوع لصفحة تسجيل الدخول
         Future.delayed(Duration(seconds: 2), () {
           if (mounted) {
@@ -99,7 +101,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
-    
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -120,14 +122,9 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 SizedBox(height: height * .02),
                 Image.asset(AppAssets.forgetPasswordPhoto),
                 SizedBox(height: height * .025),
-                
-                Text(
-                  "أدخل بريدك الإلكتروني وكلمة المرور الجديدة",
-                  style: AppStyle.reglur14white,
-                  textAlign: TextAlign.center,
-                ),
+
                 SizedBox(height: height * .025),
-                
+
                 // Email Field
                 CustomTextFormField(
                   controller: emailController,
@@ -144,92 +141,19 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     return null;
                   },
                 ),
-                SizedBox(height: height * .025),
-                
-                // New Password Field
-                CustomTextFormField(
-                  controller: newPasswordController,
-                  prefixIcon: Image.asset(AppAssets.passwordIcon),
-                  obscureText: isPasswordObscured,
-                  hint: "كلمة المرور الجديدة",
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "يرجى إدخال كلمة المرور الجديدة";
-                    }
-                    if (value.length < 8) {
-                      return "كلمة المرور يجب أن تكون 8 أحرف على الأقل";
-                    }
-                    // Strong password validation
-                    final strongPasswordRegex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$');
-                    if (!strongPasswordRegex.hasMatch(value)) {
-                      return "يجب أن تحتوي على حرف كبير وصغير ورقم";
-                    }
-                    return null;
-                  },
-                  suffixIcon: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isPasswordObscured = !isPasswordObscured;
-                      });
-                    },
-                    child: isPasswordObscured
-                        ? Image.asset(AppAssets.eyeoff)
-                        : const Icon(Icons.remove_red_eye_outlined,
-                            color: Colors.white),
-                  ),
-                ),
-                SizedBox(height: height * .025),
-                
-                // Confirm Password Field
-                CustomTextFormField(
-                  controller: confirmPasswordController,
-                  prefixIcon: Image.asset(AppAssets.passwordIcon),
-                  obscureText: isConfirmPasswordObscured,
-                  hint: "تأكيد كلمة المرور الجديدة",
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "يرجى تأكيد كلمة المرور";
-                    }
-                    if (value != newPasswordController.text) {
-                      return "كلمة المرور غير مطابقة";
-                    }
-                    return null;
-                  },
-                  suffixIcon: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isConfirmPasswordObscured = !isConfirmPasswordObscured;
-                      });
-                    },
-                    child: isConfirmPasswordObscured
-                        ? Image.asset(AppAssets.eyeoff)
-                        : const Icon(Icons.remove_red_eye_outlined,
-                            color: Colors.white),
-                  ),
-                ),
                 SizedBox(height: height * .035),
-                
-                // Reset Password Button
+
                 SizedBox(
                   width: double.infinity,
                   child: CustomElevatedButton(
-                    onPressed:  _resetPassword,
-                    text: isLoading ? "جاري التغيير..." : "تغيير كلمة المرور",
+                    onPressed: _resetPassword,
+                    text: isLoading
+                        ? S.of(context).Updating
+                        : S.of(context).VerifyEmail,
                   ),
                 ),
-                
+
                 SizedBox(height: height * .025),
-                
-                // Back to Login
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    "العودة لتسجيل الدخول",
-                    style: AppStyle.reglur14yellow,
-                  ),
-                ),
               ],
             ),
           ),

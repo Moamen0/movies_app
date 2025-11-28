@@ -15,6 +15,8 @@ import 'package:movies_app/ui/movie_details/widgets/similar_item.dart';
 import 'package:movies_app/ui/movie_details/widgets/stat_box.dart';
 import 'package:movies_app/utils/app_color.dart';
 import 'package:movies_app/utils/app_style.dart';
+import 'package:readmore/readmore.dart';
+import 'package:see_more/see_more_widget.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
   final int movieId;
@@ -40,35 +42,32 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.black.withOpacity(0.4),
-      body: Padding(
-        padding: EdgeInsets.only(top: height * 0.02),
-        child: FutureBuilder<MovieModel>(
-          future: ApiManager.getMovieDetails(widget.movieId),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (!snapshot.hasData) {
-              return const Center(child: Text('No data'));
-            } else {
-              final movie = snapshot.data!;
+      body: FutureBuilder<MovieModel>(
+        future: ApiManager.getMovieDetails(widget.movieId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData) {
+            return const Center(child: Text('No data'));
+          } else {
+            final movie = snapshot.data!;
 
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                context.read<MoviesBloc>().add(
-                      AddToHistoryEvent(
-                        movieId: movie.id!,
-                        title: movie.title ?? 'Unknown',
-                        image: movie.mediumCoverImage,
-                        rating: movie.rating,
-                      ),
-                    );
-              });
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              context.read<MoviesBloc>().add(
+                    AddToHistoryEvent(
+                      movieId: movie.id!,
+                      title: movie.title ?? 'Unknown',
+                      image: movie.mediumCoverImage,
+                      rating: movie.rating,
+                    ),
+                  );
+            });
 
-              return MovieDetailsContent(movie: movie);
-            }
-          },
-        ),
+            return MovieDetailsContent(movie: movie);
+          }
+        },
       ),
     );
   }
@@ -117,7 +116,7 @@ class MovieDetailsContent extends StatelessWidget {
               ),
 
               Positioned(
-                top: 40,
+                top: 60,
                 left: 16,
                 child: Container(
                   padding: const EdgeInsets.all(8),
@@ -135,7 +134,7 @@ class MovieDetailsContent extends StatelessWidget {
 
               // Bookmark Button
               Positioned(
-                top: 40,
+                top: 60,
                 right: 16,
                 child: BlocBuilder<MoviesBloc, MoviesState>(
                   builder: (context, state) {
@@ -360,10 +359,16 @@ class MovieDetailsContent extends StatelessWidget {
                   child: Text('Summary', style: AppStyle.roboto24BoldWhite),
                 ),
                 SizedBox(height: height * 0.01),
-                Text(
+                ReadMoreText(
                   movie.descriptionFull ?? "",
                   style: AppStyle.roboto16RegularWhite,
+                  trimLines: 5,
+                  colorClickableText: AppColor.yellow,
+                  trimMode: TrimMode.Line,
+                  trimCollapsedText: '...Read more',
+                  trimExpandedText: ' Show less',
                 ),
+               
                 SizedBox(height: height * 0.025),
 
                 // Cast
@@ -372,15 +377,18 @@ class MovieDetailsContent extends StatelessWidget {
                   child: Text('Cast', style: AppStyle.roboto24BoldWhite),
                 ),
                 SizedBox(height: height * 0.01),
-                Column(
-                  children: movie.cast?.map((actor) {
-                        return CastCard(
-                          image: actor.urlSmallImage ?? "",
-                          name: actor.name ?? "",
-                          character: actor.characterName ?? "",
-                        );
-                      }).toList() ??
-                      [],
+                SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    children: movie.cast?.map((actor) {
+                          return CastCard(
+                            image: actor.urlSmallImage ?? "",
+                            name: actor.name ?? "",
+                            character: actor.characterName ?? "",
+                          );
+                        }).toList() ??
+                        [],
+                  ),
                 ),
                 SizedBox(height: height * 0.025),
 
