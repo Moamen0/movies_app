@@ -112,6 +112,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "هل لديك حساب بالفعل؟",
     ),
     "back": MessageLookupByLibrary.simpleMessage("السابق"),
+    "changePassword": MessageLookupByLibrary.simpleMessage("تغيير كلمه السر"),
+    "changing": MessageLookupByLibrary.simpleMessage("جاري التغيير..."),
     "confirmPassword": MessageLookupByLibrary.simpleMessage(
       "تأكيد كلمة المرور",
     ),

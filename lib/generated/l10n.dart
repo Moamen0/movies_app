@@ -230,6 +230,16 @@ class S {
     return Intl.message('Next', name: 'next', desc: '', args: []);
   }
 
+  /// `Verify Email`
+  String get Verify_Email {
+    return Intl.message(
+      'Verify Email',
+      name: 'Verify_Email',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Reset Password`
   String get reset_password {
     return Intl.message(
@@ -433,6 +443,21 @@ class S {
   /// `Action`
   String get Action {
     return Intl.message('Action', name: 'Action', desc: '', args: []);
+  }
+
+  /// `Change Password`
+  String get changePassword {
+    return Intl.message(
+      'Change Password',
+      name: 'changePassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Changing...`
+  String get changing {
+    return Intl.message('Changing...', name: 'changing', desc: '', args: []);
   }
 
   /// `See More`
