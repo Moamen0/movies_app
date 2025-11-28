@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/api/api_manger.dart';
 import 'package:movies_app/api/api_model/MoviesResponse.dart';
+import 'package:movies_app/ui/home_tab/movies_item/movies_item.dart';
 import 'package:movies_app/utils/app_color.dart';
 
 import '../../utils/app_route.dart';
@@ -160,53 +161,8 @@ class _MoviesCategoryScreenState extends State<BrowseTab> {
 
                     var movie = movies[index];
 
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          AppRoute.movieDetailsScreen,
-                          arguments: movie.id,
-                        );
-                      },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Stack(
-                          children: [
-                            Image.network(
-                              movie.mediumCoverImage ?? "",
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: double.infinity,
-                            ),
-                            Positioned(
-                              top: 6,
-                              left: 6,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 9, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: AppColor.blackTransparentColor,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      movie.rating.toString(),
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(width: 3),
-                                    Icon(Icons.star,
-                                        color: AppColor.yellow, size: 14),
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
+                     return MoviesItem(movie: movie); 
+                    
                   },
                 );
               },
@@ -217,10 +173,3 @@ class _MoviesCategoryScreenState extends State<BrowseTab> {
     );
   }
 }
-/*
-onTap: () {
-                            Navigator.pushNamed(
-                                context, AppRoute.movieDetailsScreen,
-                                arguments: actionMoviesList[index].id);
-                          }
- */
