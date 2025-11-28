@@ -1,6 +1,12 @@
+// Replace the ProfileTab build method and related methods with this:
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_app/api/auth_api.dart';
+import 'package:movies_app/bloc/movies/movies_bloc.dart';
+import 'package:movies_app/bloc/movies/movies_event.dart';
+import 'package:movies_app/bloc/movies/movies_state.dart';
 import 'package:movies_app/bloc/profile/profile_bloc.dart';
 import 'package:movies_app/bloc/profile/profile_event.dart';
 import 'package:movies_app/bloc/profile/profile_state.dart';
@@ -21,9 +27,6 @@ class _ProfileTabState extends State<ProfileTab>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  List<Map<String, dynamic>> wishlistMovies = [];
-  List<Map<String, dynamic>> historyMovies = [];
-
   @override
   void initState() {
     super.initState();
@@ -33,9 +36,8 @@ class _ProfileTabState extends State<ProfileTab>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Load profile data when tab is initialized
-    // Using didChangeDependencies to ensure context is available
     context.read<ProfileBloc>().add(LoadProfileEvent());
+    context.read<MoviesBloc>().add(LoadMoviesEvent());
   }
 
   @override
@@ -52,40 +54,53 @@ class _ProfileTabState extends State<ProfileTab>
     return Scaffold(
       backgroundColor: AppColor.blackColor,
       body: BlocBuilder<ProfileBloc, ProfileState>(
-        builder: (context, state) {
-          if (state is ProfileLoading) {
+        builder: (context, profileState) {
+          if (profileState is ProfileLoading) {
             return Center(
               child: CircularProgressIndicator(color: AppColor.yellow),
             );
           }
 
-          if (state is ProfileLoaded || 
-              state is ProfileUpdating || 
-              state is ProfileUpdateSuccess) {
-            final user = state is ProfileLoaded 
-                ? state.user 
-                : state is ProfileUpdating 
-                    ? state.currentUser 
-                    : (state as ProfileUpdateSuccess).user;
-            
-            final avatarPath = state is ProfileLoaded 
-                ? state.avatarPath 
-                : state is ProfileUpdating 
-                    ? state.currentAvatarPath 
-                    : (state as ProfileUpdateSuccess).avatarPath;
+          if (profileState is ProfileLoaded ||
+              profileState is ProfileUpdating ||
+              profileState is ProfileUpdateSuccess) {
+            final user = profileState is ProfileLoaded
+                ? profileState.user
+                : profileState is ProfileUpdating
+                    ? profileState.currentUser
+                    : (profileState as ProfileUpdateSuccess).user;
 
-            return SafeArea(
-              child: Column(
-                children: [
-                  _buildProfileHeader(height, width, user, avatarPath),
-                  _buildTabBar(),
-                  Expanded(child: _buildMoviesGrid()),
-                ],
-              ),
+            final avatarPath = profileState is ProfileLoaded
+                ? profileState.avatarPath
+                : profileState is ProfileUpdating
+                    ? profileState.currentAvatarPath
+                    : (profileState as ProfileUpdateSuccess).avatarPath;
+
+            return BlocBuilder<MoviesBloc, MoviesState>(
+              builder: (context, moviesState) {
+                return SafeArea(
+                  child: Column(
+                    children: [
+                      _buildProfileHeader(
+                        height,
+                        width,
+                        user,
+                        avatarPath,
+                        moviesState.watchlist.length,
+                        moviesState.history.length,
+                      ),
+                      _buildTabBar(),
+                      Expanded(
+                        child: _buildMoviesGrid(moviesState),
+                      ),
+                    ],
+                  ),
+                );
+              },
             );
           }
 
-          if (state is ProfileError) {
+          if (profileState is ProfileError) {
             return Center(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: width * 0.1),
@@ -99,13 +114,11 @@ class _ProfileTabState extends State<ProfileTab>
                     ),
                     SizedBox(height: height * 0.03),
                     Text(
-                      state.message,
+                      profileState.message,
                       style: AppStyle.bold20White,
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: height * 0.04),
-                    
-                    // Retry Button
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
@@ -121,21 +134,21 @@ class _ProfileTabState extends State<ProfileTab>
                           context.read<ProfileBloc>().add(LoadProfileEvent());
                         },
                         icon: Icon(Icons.refresh),
-                        label: Text(S.of(context).Retry, style: AppStyle.reglur16black),
+                        label: Text(S.of(context).Retry,
+                            style: AppStyle.reglur16black),
                       ),
                     ),
-                    
                     SizedBox(height: height * 0.02),
-                    
-                    // Login Button (if not authenticated)
-                    if (state.message.contains('login') || state.message.contains('Login'))
+                    if (profileState.message.contains('login') ||
+                        profileState.message.contains('Login'))
                       SizedBox(
                         width: double.infinity,
                         child: OutlinedButton.icon(
                           style: OutlinedButton.styleFrom(
                             foregroundColor: AppColor.yellow,
                             side: BorderSide(color: AppColor.yellow),
-                            padding: EdgeInsets.symmetric(vertical: height * 0.02),
+                            padding:
+                                EdgeInsets.symmetric(vertical: height * 0.02),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -146,7 +159,8 @@ class _ProfileTabState extends State<ProfileTab>
                             );
                           },
                           icon: Icon(Icons.login),
-                          label: Text(S.of(context).login, style: AppStyle.reglur16yellow),
+                          label: Text(S.of(context).login,
+                              style: AppStyle.reglur16yellow),
                         ),
                       ),
                   ],
@@ -163,7 +177,14 @@ class _ProfileTabState extends State<ProfileTab>
     );
   }
 
-  Widget _buildProfileHeader(double height, double width, dynamic user, String avatarPath) {
+  Widget _buildProfileHeader(
+    double height,
+    double width,
+    dynamic user,
+    String avatarPath,
+    int watchlistCount,
+    int historyCount,
+  ) {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: width * 0.03,
@@ -186,7 +207,8 @@ class _ProfileTabState extends State<ProfileTab>
                         errorBuilder: (context, error, stackTrace) {
                           return Container(
                             color: AppColor.grayColor,
-                            child: Icon(Icons.person, size: 40, color: Colors.white),
+                            child: Icon(Icons.person,
+                                size: 40, color: Colors.white),
                           );
                         },
                       ),
@@ -200,12 +222,12 @@ class _ProfileTabState extends State<ProfileTab>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _buildStat(
-                    count: wishlistMovies.length.toString(),
+                    count: watchlistCount.toString(),
                     label: S.of(context).Wish_List,
                   ),
                   SizedBox(width: width * 0.1),
                   _buildStat(
-                    count: historyMovies.length.toString(),
+                    count: historyCount.toString(),
                     label: S.of(context).History,
                   ),
                 ],
@@ -221,7 +243,6 @@ class _ProfileTabState extends State<ProfileTab>
                 child: ElevatedButton(
                   onPressed: () async {
                     await Navigator.pushNamed(context, AppRoute.updateProfile);
-                    // Refresh profile after returning from update screen
                     if (mounted) {
                       context.read<ProfileBloc>().add(LoadProfileEvent());
                     }
@@ -314,17 +335,17 @@ class _ProfileTabState extends State<ProfileTab>
     );
   }
 
-  Widget _buildMoviesGrid() {
+  Widget _buildMoviesGrid(MoviesState moviesState) {
     return TabBarView(
       controller: _tabController,
       children: [
-        _buildMoviesList(wishlistMovies),
-        _buildMoviesList(historyMovies),
+        _buildMoviesList(moviesState.watchlist),
+        _buildMoviesList(moviesState.history),
       ],
     );
   }
 
-  Widget _buildMoviesList(List<Map<String, dynamic>> movies) {
+  Widget _buildMoviesList(List<MovieItem> movies) {
     if (movies.isEmpty) {
       return Center(
         child: Column(
@@ -332,6 +353,10 @@ class _ProfileTabState extends State<ProfileTab>
           children: [
             Image.asset(AppAssets.popcorn),
             SizedBox(height: 16),
+            Text(
+              'No movies yet',
+              style: AppStyle.reglur16white,
+            ),
           ],
         ),
       );
@@ -352,13 +377,13 @@ class _ProfileTabState extends State<ProfileTab>
     );
   }
 
-  Widget _buildMovieCard(Map<String, dynamic> movie) {
+  Widget _buildMovieCard(MovieItem movie) {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(
           context,
           AppRoute.movieDetailsScreen,
-          arguments: movie['id'],
+          arguments: movie.id,
         );
       },
       child: Container(
@@ -368,52 +393,93 @@ class _ProfileTabState extends State<ProfileTab>
         ),
         child: Stack(
           children: [
-            Container(
-              decoration: BoxDecoration(
+            // Movie Image or Placeholder
+            if (movie.image != null && movie.image!.isNotEmpty)
+              ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    AppColor.yellow.withOpacity(0.3),
-                    AppColor.grayColor,
-                  ],
-                ),
-              ),
-              child: Center(
-                child: Icon(
-                  Icons.movie_outlined,
-                  size: 40,
-                  color: Colors.grey[600],
-                ),
-              ),
-            ),
-            Positioned(
-              top: 8,
-              left: 8,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.black54,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      movie['rating'].toString(),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
+                child: CachedNetworkImage(
+                  imageUrl: movie.image!,
+                  width: double.infinity,
+                  height: double.infinity,
+                  fit: BoxFit.cover,
+                  placeholder: (_, __) => Center(
+                    child: CircularProgressIndicator(
+                      color: AppColor.yellow,
+                      strokeWidth: 2,
+                    ),
+                  ),
+                  errorWidget: (_, __, ___) => Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          AppColor.yellow.withOpacity(0.3),
+                          AppColor.grayColor,
+                        ],
                       ),
                     ),
-                    SizedBox(width: 2),
-                    Icon(Icons.star, color: AppColor.yellow, size: 14),
-                  ],
+                    child: Center(
+                      child: Icon(
+                        Icons.movie_outlined,
+                        size: 40,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            else
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      AppColor.yellow.withOpacity(0.3),
+                      AppColor.grayColor,
+                    ],
+                  ),
+                ),
+                child: Center(
+                  child: Icon(
+                    Icons.movie_outlined,
+                    size: 40,
+                    color: Colors.grey[600],
+                  ),
                 ),
               ),
-            ),
+
+            // Rating Badge
+            if (movie.rating != null)
+              Positioned(
+                top: 8,
+                left: 8,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: Colors.black54,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        movie.rating!.toStringAsFixed(1),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(width: 2),
+                      Icon(Icons.star, color: AppColor.yellow, size: 14),
+                    ],
+                  ),
+                ),
+              ),
           ],
         ),
       ),

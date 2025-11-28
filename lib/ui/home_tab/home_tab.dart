@@ -5,7 +5,9 @@ import 'package:movies_app/utils/app_color.dart';
 import 'package:movies_app/utils/app_style.dart';
 
 class HomeTab extends StatelessWidget {
-  const HomeTab({super.key});
+    HomeTab({super.key,this.onNavigateToTab});
+    final Function(int)? onNavigateToTab;
+
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,8 @@ class HomeTab extends StatelessWidget {
           );
         }
         var moviesList = snapshot.data?.data?.movies ?? [];
-        return Hometabitem(movieList: moviesList);
+        return Hometabitem(movieList: moviesList,   onNavigateToTab: onNavigateToTab,
+);
       },
     );
   }

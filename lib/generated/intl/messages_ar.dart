@@ -25,6 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Account_deleted_successfully": MessageLookupByLibrary.simpleMessage(
       "تم حذف الحساب بنجاح",
     ),
+    "Action": MessageLookupByLibrary.simpleMessage("اكشن"),
     "Avatar": MessageLookupByLibrary.simpleMessage("الافاتار"),
     "Cancel": MessageLookupByLibrary.simpleMessage("إلغاء"),
     "Confirm_New_Password": MessageLookupByLibrary.simpleMessage(
@@ -47,6 +48,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "اكتشف أفلامًا من كل الأنواع وبجميع الجودات المتاحة. ابحث عن شيء جديد ومثير لمشاهدته كل يوم.",
     ),
     "DontHaveAcc": MessageLookupByLibrary.simpleMessage("ليس لديك حساب"),
+    "Drama": MessageLookupByLibrary.simpleMessage("دراما"),
     "Edit_Profile": MessageLookupByLibrary.simpleMessage("تعديل الملف الشخصي"),
     "Error_loading_data": MessageLookupByLibrary.simpleMessage(
       "خطأ في تحميل البيانات",
@@ -93,6 +95,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Save_movies_to_your_watchlist": MessageLookupByLibrary.simpleMessage(
       "احفظ الأفلام في قائمة المشاهدة الخاصة بك لتتابع ما تريد مشاهدته لاحقًا. استمتع بأفلام متنوعة في مختلف الجودات والأنواع.",
     ),
+    "See_More": MessageLookupByLibrary.simpleMessage("مشاهدة المزيد"),
     "Shareyourthoughts": MessageLookupByLibrary.simpleMessage(
       "شارك أفكارك حول الأفلام التي شاهدتها. تعمّق في تفاصيل الأفلام وساعد الآخرين على اكتشاف أفلام رائعة من خلال مراجعاتك.",
     ),

@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:movies_app/api/api_manger.dart';
+import 'package:movies_app/generated/l10n.dart';
 import 'package:movies_app/ui/home_tab/movies_item/movies_item.dart';
 import 'package:movies_app/utils/app_assets.dart';
 import 'package:movies_app/utils/app_color.dart';
@@ -12,7 +13,8 @@ import '../../../api/api_model/MoviesResponse.dart';
 class Hometabitem extends StatefulWidget {
   List<Movies> movieList;
 
-  Hometabitem({required this.movieList, super.key});
+  Hometabitem({required this.movieList, super.key, this.onNavigateToTab});
+  final Function(int)? onNavigateToTab;
 
   @override
   State<Hometabitem> createState() => _HometabitemState();
@@ -131,15 +133,17 @@ class _HometabitemState extends State<Hometabitem> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Action',
+                        S.of(context).Action,
                         style: AppStyle.reglur20white,
                       ),
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          widget.onNavigateToTab?.call(2);
+                        },
                         child: Row(
                           children: [
                             Text(
-                              'See More',
+                              S.of(context).See_More,
                               style: AppStyle.reglur16yellow,
                             ),
                             SizedBox(
@@ -233,16 +237,21 @@ class _HometabitemState extends State<Hometabitem> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Drama',
+                        S.of(context).Drama,
                         style: AppStyle.reglur20white,
                       ),
                       InkWell(
                         onTap: () {},
                         child: Row(
                           children: [
-                            Text(
-                              'See More',
-                              style: AppStyle.reglur16yellow,
+                            GestureDetector(
+                              onTap: () {
+                                widget.onNavigateToTab?.call(2);
+                              },
+                              child: Text(
+                                S.of(context).See_More,
+                                style: AppStyle.reglur16yellow,
+                              ),
                             ),
                             SizedBox(
                               width: width * 0.01,
