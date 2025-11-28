@@ -12,7 +12,9 @@
       "See_More": "مشاهدة المزيد",
           "Drama": "دراما",
     "Action": "اكشن",
+    "changing": "جاري التغيير...",
 
+    "changePassword": "تغيير كلمه السر",
 
   "confirmPassword": "تأكيد كلمة المرور",
   "phoneNumber": "رقم الهاتف",

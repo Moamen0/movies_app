@@ -38,7 +38,7 @@ class MoviesApp extends StatelessWidget {
         builder: (context, locale) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            locale: locale, // Dynamic locale from LocaleCubit
+            locale: locale, 
             localizationsDelegates: const [
               S.delegate,
               GlobalMaterialLocalizations.delegate,
