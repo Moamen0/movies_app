@@ -9,4 +9,5 @@ class AppRoute {
   static const String homeScreen = "home_screen";
   static const String forgetPassword = 'ForgetPassword';
   static const String movieDetailsScreen = 'MovieDetailsScreen';
+  static const String browse = 'Browse';
 }

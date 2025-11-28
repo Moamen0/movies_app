@@ -425,6 +425,21 @@ class S {
     return Intl.message('Retry', name: 'Retry', desc: '', args: []);
   }
 
+  /// `Drama`
+  String get Drama {
+    return Intl.message('Drama', name: 'Drama', desc: '', args: []);
+  }
+
+  /// `Action`
+  String get Action {
+    return Intl.message('Action', name: 'Action', desc: '', args: []);
+  }
+
+  /// `See More`
+  String get See_More {
+    return Intl.message('See More', name: 'See_More', desc: '', args: []);
+  }
+
   /// `Updating...`
   String get Updating {
     return Intl.message('Updating...', name: 'Updating', desc: '', args: []);

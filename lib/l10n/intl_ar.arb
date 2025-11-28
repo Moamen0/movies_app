@@ -9,6 +9,11 @@
   "createOne": "أنشئ حسابًا!",
   "register": "إنشاء حساب",
   "name": "الاسم",
+      "See_More": "مشاهدة المزيد",
+          "Drama": "دراما",
+    "Action": "اكشن",
+
+
   "confirmPassword": "تأكيد كلمة المرور",
   "phoneNumber": "رقم الهاتف",
   "alreadyHaveAccount": "هل لديك حساب بالفعل؟",

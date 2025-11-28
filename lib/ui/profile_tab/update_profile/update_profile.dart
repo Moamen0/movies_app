@@ -119,7 +119,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 duration: const Duration(seconds: 1),
               ),
             );
-            // Navigate back to profile tab after successful update
             Future.delayed(const Duration(milliseconds: 1500), () {
               if (mounted) {
                 Navigator.of(context).pop();
@@ -176,7 +175,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
             final isUpdating = state is ProfileUpdating;
 
-            // Initialize controllers with user data
             _initializeControllers(user, avatarPath);
 
             return Padding(
