@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movies_app/api/api_manger.dart';
 import 'package:movies_app/model/Api_movie_deatils.dart';
@@ -7,9 +8,7 @@ import 'package:movies_app/ui/movie_details/widgets/screenshots_list.dart';
 import 'package:movies_app/ui/movie_details/widgets/similar_item.dart';
 import 'package:movies_app/ui/movie_details/widgets/stat_box.dart';
 import 'package:movies_app/utils/app_color.dart';
-import 'package:movies_app/utils/app_route.dart';
 import 'package:movies_app/utils/app_style.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class MovieDetailsScreen extends StatelessWidget {
   final int movieId;
@@ -90,7 +89,7 @@ class MovieDetailsContent extends StatelessWidget {
                   ),
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, AppRoute.homeScreen);
+                      Navigator.pop(context);
                     },
                     child:
                         const Icon(Icons.arrow_back_ios, color: Colors.white),
@@ -203,7 +202,7 @@ class MovieDetailsContent extends StatelessWidget {
                             EdgeInsets.symmetric(horizontal: width * 0.005),
                         child: StatBox(
                           icon: Icons.favorite,
-                          text: movie.likeCount?.toString() ?? "0",
+                          text: '${movie.likeCount}' ?? "0",
                           color: Colors.red,
                         ),
                       ),

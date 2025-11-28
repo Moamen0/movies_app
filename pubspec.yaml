@@ -21,6 +21,7 @@ version: 1.0.0+1
 environment:
   sdk: ^3.6.0
 
+
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
@@ -46,6 +47,8 @@ dependencies:
   carousel_slider: ^5.1.1
   google_fonts: ^6.3.0
   cached_network_image: ^3.4.1
+  bloc: ^9.1.0
+  flutter_bloc: ^9.1.1
 dev_dependencies:
   flutter_test:
    sdk: flutter

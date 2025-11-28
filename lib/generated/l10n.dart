@@ -389,6 +389,156 @@ class S {
   String get action {
     return Intl.message('Action', name: 'action', desc: '', args: []);
   }
+
+  /// `Edit Profile`
+  String get Edit_Profile {
+    return Intl.message(
+      'Edit Profile',
+      name: 'Edit_Profile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exit`
+  String get Exit {
+    return Intl.message('Exit', name: 'Exit', desc: '', args: []);
+  }
+
+  /// `Wish List`
+  String get Wish_List {
+    return Intl.message('Wish List', name: 'Wish_List', desc: '', args: []);
+  }
+
+  /// `History`
+  String get History {
+    return Intl.message('History', name: 'History', desc: '', args: []);
+  }
+
+  /// `Watch List`
+  String get Watch_List {
+    return Intl.message('Watch List', name: 'Watch_List', desc: '', args: []);
+  }
+
+  /// `Retry`
+  String get Retry {
+    return Intl.message('Retry', name: 'Retry', desc: '', args: []);
+  }
+
+  /// `Updating...`
+  String get Updating {
+    return Intl.message('Updating...', name: 'Updating', desc: '', args: []);
+  }
+
+  /// `Profile updated successfully`
+  String get Profile_updated_successfully {
+    return Intl.message(
+      'Profile updated successfully',
+      name: 'Profile_updated_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to update profile`
+  String get Failed_to_update_profile {
+    return Intl.message(
+      'Failed to update profile',
+      name: 'Failed_to_update_profile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error occurred`
+  String get Error_occurred {
+    return Intl.message(
+      'Error occurred',
+      name: 'Error_occurred',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No data available`
+  String get No_data_available {
+    return Intl.message(
+      'No data available',
+      name: 'No_data_available',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error loading data`
+  String get Error_loading_data {
+    return Intl.message(
+      'Error loading data',
+      name: 'Error_loading_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to delete account`
+  String get Failed_to_delete_account {
+    return Intl.message(
+      'Failed to delete account',
+      name: 'Failed_to_delete_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account deleted successfully`
+  String get Account_deleted_successfully {
+    return Intl.message(
+      'Account deleted successfully',
+      name: 'Account_deleted_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete your account? This action cannot be undone.`
+  String get Delete_Account_Confirmation {
+    return Intl.message(
+      'Are you sure you want to delete your account? This action cannot be undone.',
+      name: 'Delete_Account_Confirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get Cancel {
+    return Intl.message('Cancel', name: 'Cancel', desc: '', args: []);
+  }
+
+  /// `Delete`
+  String get Delete {
+    return Intl.message('Delete', name: 'Delete', desc: '', args: []);
+  }
+
+  /// `Please enter name`
+  String get Please_enter_name {
+    return Intl.message(
+      'Please enter name',
+      name: 'Please_enter_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter phone number`
+  String get Please_enter_phone {
+    return Intl.message(
+      'Please enter phone number',
+      name: 'Please_enter_phone',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

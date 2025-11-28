@@ -1,8 +1,10 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:movies_app/api/endpoints.dart';
 import 'package:movies_app/model/Api_movie_Suggestions.dart';
 import 'package:movies_app/model/Api_movie_deatils.dart';
+
 import 'api_model/MoviesResponse.dart';
 
 class ApiManager {
@@ -41,6 +43,7 @@ class ApiManager {
       rethrow;
     }
   }
+  
 
   static Future<List<MovieSuggestion>> getMovieSuggestions(int movieId) async {
     try {
@@ -61,5 +64,43 @@ class ApiManager {
     } catch (e) {
       rethrow;
     }
+  }
+
+  static Future<MoviesResponse> getMoviesByGenreandPage(
+      String genre, int page) async {
+    try {
+      Uri url = Uri.https(
+        Endpoint.serverName,
+        Endpoint.ApiName,
+        {
+          "genre": genre,
+          "sort_by": "rating",
+          "page": page.toString(),
+        },
+      );
+
+      var response = await http.get(url);
+      return MoviesResponse.fromJson(jsonDecode(response.body));
+    } catch (e) {
+      rethrow;
+    }
+  }
+  static Future<MoviesResponse> getMoviesBy(String text) async{
+    try{
+      Uri url = Uri.https(
+        Endpoint.serverName,
+        Endpoint.movieSearchApi,
+        {
+          'query_term':text
+        }
+      );
+      var response = await http.get(url);
+      return MoviesResponse.fromJson(jsonDecode(response.body));
+    }catch(e){
+      rethrow;
+
+    }
+
+
   }
 }
