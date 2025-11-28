@@ -136,7 +136,6 @@ class _SearchTabState extends State<SearchTab> {
           );
         }
 
-        // Check API status
         if (snapshot.hasData && snapshot.data!.status != 'ok') {
           return Center(
             child: Column(
@@ -160,7 +159,6 @@ class _SearchTabState extends State<SearchTab> {
           );
         }
 
-        // Empty results
         var moviesList = snapshot.data?.data?.movies ?? [];
         if (moviesList.isEmpty) {
           return Center(
@@ -183,13 +181,11 @@ class _SearchTabState extends State<SearchTab> {
           );
         }
 
-        // Success - show results
         return Padding(
           padding: EdgeInsets.all(width * 0.03),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Result count
               Padding(
                 padding: EdgeInsets.only(
                   left: width * 0.02,
@@ -201,7 +197,6 @@ class _SearchTabState extends State<SearchTab> {
                 ),
               ),
               
-              // Movies grid
               Expanded(
                 child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
