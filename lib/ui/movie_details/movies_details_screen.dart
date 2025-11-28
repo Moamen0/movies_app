@@ -202,7 +202,7 @@ class MovieDetailsContent extends StatelessWidget {
                             EdgeInsets.symmetric(horizontal: width * 0.005),
                         child: StatBox(
                           icon: Icons.favorite,
-                          text: movie.likeCount?.toString() ?? "0",
+                          text: '${movie.likeCount}' ?? "0",
                           color: Colors.red,
                         ),
                       ),
