@@ -125,7 +125,8 @@ class _ProfileTabState extends State<ProfileTab>
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.yellow,
                           foregroundColor: Colors.black,
-                          padding: EdgeInsets.symmetric(vertical: height * 0.02),
+                          padding:
+                              EdgeInsets.symmetric(vertical: height * 0.02),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -215,7 +216,12 @@ class _ProfileTabState extends State<ProfileTab>
                     ),
                   ),
                   SizedBox(height: height * 0.015),
-                  Text(user?.name ?? 'User Name', style: AppStyle.bold20White),
+                  SizedBox(
+                    width: width * 0.29,
+                    child: Text(user?.name ?? 'User Name',
+                        overflow: TextOverflow.ellipsis,
+                        style: AppStyle.bold20White),
+                  ),
                 ],
               ),
               Row(

@@ -21,11 +21,16 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController nameController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController emailController =
+      TextEditingController(text: "moamen.abdallah@gmail.com");
+  TextEditingController passwordController =
+      TextEditingController(text: "QWErty1234@");
+  TextEditingController nameController =
+      TextEditingController(text: "Moamen Abdallah");
+  TextEditingController phoneController =
+      TextEditingController(text: "01111111111");
+  TextEditingController confirmPasswordController =
+      TextEditingController(text: "QWErty1234@");
 
   int selectedAvatar = 1;
   bool isPasswordObscured = true;
@@ -94,7 +99,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             await prefs.setString("token", token);
 
             // Save user info if available
-     
 
             if (!mounted) return;
 
@@ -221,7 +225,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(height: height * 0.01),
                 Text(S.of(context).Avatar, style: AppStyle.reglur16white),
                 SizedBox(height: height * 0.02),
-                
+
                 // NAME FIELD
                 CustomTextFormField(
                   controller: nameController,
@@ -238,7 +242,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                 ),
                 SizedBox(height: height * .024),
-                
+
                 // EMAIL FIELD
                 CustomTextFormField(
                   controller: emailController,
@@ -256,7 +260,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                 ),
                 SizedBox(height: height * .024),
-                
+
                 // PASSWORD FIELD - UPDATED WITH STRONG PASSWORD VALIDATION
                 CustomTextFormField(
                   controller: passwordController,
@@ -271,7 +275,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return "password must have 6 chars or more";
                     }
                     // Check for strong password (uppercase, lowercase, number)
-                    final strongPasswordRegex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$');
+                    final strongPasswordRegex =
+                        RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$');
                     if (!strongPasswordRegex.hasMatch(value)) {
                       return "The password must contain at least one lowercase letter, one uppercase letter, and one special character such as @ ";
                     }
@@ -287,7 +292,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 SizedBox(height: height * .024),
-                
+
                 // CONFIRM PASSWORD FIELD
                 CustomTextFormField(
                   controller: confirmPasswordController,
@@ -313,7 +318,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 SizedBox(height: height * .024),
-                
+
                 CustomTextFormField(
                   controller: phoneController,
                   prefixIcon: Image.asset(AppAssets.phoneIcon),
@@ -330,7 +335,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                 ),
                 SizedBox(height: height * .024),
-                
+
                 // REGISTER BUTTON
                 SizedBox(
                   width: double.infinity,
@@ -340,7 +345,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         _register();
                       }
                     },
-                    text: isLoading ? "loading..." : S.of(context).Create_Account,
+                    text:
+                        isLoading ? "loading..." : S.of(context).Create_Account,
                   ),
                 ),
                 SizedBox(height: height * 0.01),
