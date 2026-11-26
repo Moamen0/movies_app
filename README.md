@@ -1,16 +1,29 @@
-# movies_app
+# Movies App
 
-A new Flutter project.
+A Flutter movies app built by a team of developers during the Route Flutter diploma. Browse and search movies, see details, and manage a profile, in English or Arabic.
 
-## Getting Started
+## Features
+- Onboarding, splash screen, login, register, forgot password
+- Home, Search, Browse and Profile tabs
+- Movie details: stats, genres, cast, screenshots, similar movies
+- Update profile and reset password
+- English and Arabic localization (saved locale)
 
-This project is a starting point for a Flutter application.
+## Tech stack
+Flutter, Dart, bloc / flutter_bloc (movies, profile, locale), http, shared_preferences, intl, cached_network_image, carousel_slider, google_fonts
 
-A few resources to get you started if this is your first Flutter project:
+## Data sources
+- Movies: YTS API (yts.lt), list, details and suggestions endpoints
+- Auth and profile: Route movies API (https://route-movie-apis.vercel.app)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Run
+```bash
+flutter pub get
+flutter run
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Screenshots
+<!-- Add real screenshots here -->
+
+## Team
+Git history shows commits from Moamen Abdallah and other teammates. Add names and GitHub links here.
